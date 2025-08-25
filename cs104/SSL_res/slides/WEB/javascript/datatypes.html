@@ -1,0 +1,87 @@
+<html>
+<head>
+    
+    <title>JavaScript Data Types</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 18px;
+            white-space: pre-line;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            // 1. String Data Type
+            let name = "Alice";
+            console.log("String:", name);  // String: Alice
+            document.getElementById("output").innerText += "String: " + name + "\n";
+
+            // 2. Number Data Type
+            let age = 30;
+            console.log("Number:", age);  // Number: 30
+            document.getElementById("output").innerText += "Number: " + age + "\n";
+
+            // 3. BigInt Data Type (for large integers)
+            let bigNumber = 9007199254740991n;
+            console.log("BigInt:", bigNumber);  // BigInt: 9007199254740991n
+            document.getElementById("output").innerText += "BigInt: " + bigNumber + "\n";
+
+            // 4. Boolean Data Type
+            let isAdult = true;
+            console.log("Boolean:", isAdult);  // Boolean: true
+            document.getElementById("output").innerText += "Boolean: " + isAdult + "\n";
+
+            // 5. Undefined Data Type
+            let undefinedVariable;
+            console.log("Undefined:", undefinedVariable);  // Undefined: undefined
+            document.getElementById("output").innerText += "Undefined: " + undefinedVariable + "\n";
+
+            // 6. Null Data Type
+            let emptyValue = null;
+            console.log("Null:", emptyValue);  // Null: null
+            document.getElementById("output").innerText += "Null: " + emptyValue + "\n";
+
+            // 7. Symbol Data Type (used for unique identifiers)
+            let uniqueSymbol = Symbol("id");
+            console.log("Symbol:", uniqueSymbol);  // Symbol: Symbol(id)
+            document.getElementById("output").innerText += "Symbol: " + uniqueSymbol.toString() + "\n";
+
+            // 8. Dynamic Typing Example
+            let dynamicVar = "I am a string now!";
+            console.log("Dynamic Variable (String):", dynamicVar);  // Dynamic Variable (String): I am a string now!
+            document.getElementById("output").innerText += "Dynamic Variable (String): " + dynamicVar + "\n";
+            dynamicVar = 42;  // Now it's a number
+            console.log("Dynamic Variable (Now a Number):", dynamicVar);  // Dynamic Variable (Now a Number): 42
+            document.getElementById("output").innerText += "Dynamic Variable (Now a Number): " + dynamicVar + "\n";
+
+            // 9. Operations: Adding Number and String (JavaScript treats number as a string)
+            //"5" and '5' are both strings. 
+            //JavaScript allows both double quotes (") and single quotes (') to denote string literals, and they are equivalent.
+            let result = 10 + "5"; // Concatenation, not addition
+            console.log("Result of 10 + '5' (String concatenation):", result);  // Result of 10 + '5' (String concatenation): 105
+            document.getElementById("output").innerText += "Result of 10 + '5' (String concatenation): " + result + "\n";
+
+            // 10. Evaluating expressions from left to right
+            let expressionResult = 5 + 3 * 2;  // Multiplies first (3 * 2) then adds 5
+            console.log("Expression result (5 + 3 * 2):", expressionResult);  // Expression result (5 + 3 * 2): 11
+            document.getElementById("output").innerText += "Expression result (5 + 3 * 2): " + expressionResult + "\n";
+
+            // 11. Comparison Example: Loose equality (==) vs Strict equality (===)
+            let isEqual = 5 == "5";  // Loose equality, checks value
+            let isStrictEqual = 5 === "5";  // Strict equality, checks both value and type
+            console.log("5 == '5' (Loose Equality):", isEqual);  // 5 == '5' (Loose Equality): true
+            console.log("5 === '5' (Strict Equality):", isStrictEqual);  // 5 === '5' (Strict Equality): false
+            document.getElementById("output").innerText += "5 == '5' (Loose Equality): " + isEqual + "\n";
+            document.getElementById("output").innerText += "5 === '5' (Strict Equality): " + isStrictEqual + "\n";
+        };
+    </script>
+</head>
+<body>
+    <h1>JavaScript Data Types Example</h1>
+    <p>Check the browser's console for the output, and see the page below:</p>
+    <div id="output"></div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<html>
+<head>
+  <title>Comprehensive UI Events</title>
+  <style>
+    button, input {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    #output {
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    #eventButton:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Comprehensive UI Events Example</h1>
+
+  <!-- Button for Mouse and Click Events -->
+  <button id="eventButton">Hover or Click Me!</button>
+
+  <!-- Input Field for Keyboard and Focus Events -->
+  <input id="textInput" type="text" placeholder="Type something here..." />
+
+  <!-- Output area -->
+  <div id="output"></div>
+
+  <script>
+    const button = document.getElementById('eventButton');
+    const textInput = document.getElementById('textInput');
+    const output = document.getElementById('output');
+
+    // Click event
+    //This is an arrow function, a shorthand way to write functions in JavaScript.
+    //Alternative would have been 
+    //function handleClick() {
+    //output.innerHTML += `<p>Button clicked!</p>`;
+    //}
+    //button.addEventListener('click', handleClick);
+    button.addEventListener('click', () => {
+      output.innerHTML += `<p>Button clicked!</p>`;
+    });
+
+    // Double click event
+    button.addEventListener('dblclick', () => {
+      output.innerHTML += `<p>Button double-clicked!</p>`;
+    });
+
+    // Mouseover event
+    button.addEventListener('mouseover', () => {
+      output.innerHTML += `<p>Mouse is over the button.</p>`;
+    });
+
+    // Mouseout event
+    button.addEventListener('mouseout', () => {
+      output.innerHTML += `<p>Mouse left the button.</p>`;
+    });
+
+    // Keydown event
+    textInput.addEventListener('keydown', (event) => {
+      output.innerHTML += `<p>Key pressed down: ${event.key}</p>`;
+    });
+
+    // Keyup event
+    textInput.addEventListener('keyup', (event) => {
+      output.innerHTML += `<p>Key released: ${event.key}</p>`;
+    });
+
+    // Focus event
+    textInput.addEventListener('focus', () => {
+      output.innerHTML += `<p>Input field focused.</p>`;
+    });
+
+    // Blur event
+    textInput.addEventListener('blur', () => {
+      output.innerHTML += `<p>Input field lost focus.</p>`;
+    });
+  </script>
+</body>
+</html>

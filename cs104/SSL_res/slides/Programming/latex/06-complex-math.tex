@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb}
+
+\title{Mathematical Expressions in LaTeX}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Mathematical expressions in LaTeX are written using different formatting techniques, including subscripts, superscripts, integrals, summations, matrices, and differential equations. This document demonstrates various mathematical notations.
+
+\section{Subscripts and Superscripts}
+Subscripts in math mode are written as $a_b$ and superscripts are written as $a^b$. These can be combined and nested to write expressions such as:
+
+\[ T^{i_1 i_2 \dots i_p}_{j_1 j_2 \dots j_q} = T(x^{i_1},\dots,x^{i_p},e_{j_1},\dots,e_{j_q}) \]
+
+\section{Integrals and Fractions}
+We write integrals using $\int$ and fractions using $\frac{a}{b}$. Limits are placed on integrals using superscripts and subscripts:
+
+\[ \int_0^1 \frac{dx}{e^x} =  \frac{e-1}{e} \]
+
+\section{Greek Letters and Mathematical Operators}
+Lower case Greek letters are written as $\omega$, $\delta$, etc., while upper case Greek letters are written as $\Omega$, $\Delta$. Mathematical operators are prefixed with a backslash as $\sin(\beta)$, $\cos(\alpha)$, $\log(x)$, etc.
+
+\section{Summations and Products}
+We can express summations and products using the $\sum$ and $\prod$ symbols:
+
+\[ \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6} \]
+
+\[ \prod_{k=1}^{n} k = n! \]
+
+\section{Complex Numbers and Exponential Functions}
+Complex numbers and exponential notation can be written as:
+
+\[ e^{i\pi} + 1 = 0 \]
+
+\section{Vectors and Matrices}
+Vectors and matrices can be represented as follows:
+
+\[ \mathbf{v} = \begin{bmatrix} x \\ y \\ z \end{bmatrix} \]
+
+\[ \mathbf{A} = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \]
+
+\section{Differential Equations}
+Differential equations can be written using derivatives:
+
+\[ \frac{d^2y}{dx^2} + \omega^2 y = 0 \]
+
+\section{Conclusion}
+LaTeX provides a robust framework for writing mathematical expressions, from basic equations to advanced notations. Proper formatting ensures clarity in scientific and technical documents.
+
+\end{document}

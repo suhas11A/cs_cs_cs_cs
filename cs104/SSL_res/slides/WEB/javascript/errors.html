@@ -1,0 +1,48 @@
+<html>
+<head>
+  <title>JavaScript try-catch-throw and const Example</title>
+  <script>
+    function tryCatchExample() {
+      // Define a constant array
+      const people = ["Aarav", "Isha", "Rajesh"];
+
+      // Output the initial array
+      //The join() method combines all elements of an array into a string, placing the provided delimiter between each element.
+      let output = "Initial Array:\n" + people.join(", ") + "\n\n";
+
+      try {
+        // Adding a new item at the end of the array (allowed with const)
+        people.push("Neha");
+        output += "After adding an item:\n" + people.join(", ") + "\n\n";
+
+        // Attempting to assign a new array to the const variable (not allowed)
+        people = ["Priya", "Vikram"];
+      } catch (error) {
+        // Handle the error and display it
+        output += "Error: " + error.message + "\n\n";
+      }
+
+      // Demonstrate throwing an error
+      try {
+        if (people.length > 3) {
+          throw "Too many people in the array!";
+        }
+      } catch (error) {
+        // Catch the thrown error
+        output += "Custom Error: " + error + "\n\n";
+      }
+
+      // Output the final state of the array
+      output += "Final Array:\n" + people.join(", ");
+
+      // Display the results
+      document.getElementById("message").innerText = output;
+    }
+  </script>
+</head>
+<body>
+  <h1>JavaScript try-catch-throw and const Example</h1>
+  <button onclick="tryCatchExample()">Click me to run the example</button>
+  <pre id="message"></pre>
+</body>
+</html>

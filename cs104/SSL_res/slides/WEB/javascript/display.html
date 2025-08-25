@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JavaScript Display Methods</title>
+</head>
+<body>
+  <h1>JavaScript Display Methods</h1>
+  <p id="innerHTMLExample">This will be replaced using innerHTML.</p>
+  
+  <button onclick="displayExamples()">Click to See Examples</button>
+
+  <script>
+    function displayExamples() {
+      // 1. Using innerHTML to modify an existing HTML element
+      document.getElementById('innerHTMLExample').innerHTML = "This text was updated using innerHTML.";
+
+      // 2. Using document.write() to write directly into the HTML output
+      //This will replace everything in the page; comment it first and then uncomment it to see it in action
+      //document.write("<p>This paragraph is added using document.write().</p>");
+      
+      // 3. Using alert() to show a message box
+      window.alert("This is displayed in an alert box using window.alert().");
+      
+      // 4. Using console.log() to display data in the console
+      console.log("This is logged into the console using console.log().");
+    }
+  </script>
+</body>
+</html>

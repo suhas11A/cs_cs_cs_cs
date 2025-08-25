@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Subscribe Now</title>
+    </head>
+    <body>
+        <h1>Subscribe to Our Book Club</h1>
+
+        <form id="subscriptionForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name">
+            <br>
+            <label for="age">Age:</label>
+            <input type="number" id="age">
+            <br>
+            <label>Subscription Plan:</label><br />
+            <!-- TODO: Add radio buttons for the various subscription plans. -->
+            <input type="radio" id="weekly" name="subscription" value="cpp">
+            <label for="weekly">Weekly</label>
+            <input type="radio" id="monthly" name="subscription" value="cpp">
+            <label for="manthly">Monthly</label>
+            <input type="radio" id="yearly" name="subscription" value="cpp">
+            <label for="yearly">Yearly</label>
+
+            <label>Preferred Genres:</label><br />
+            <!-- TODO: Add checboxes for the various genres. -->
+            <input type="checkbox" name="preferred" id="fiction">
+            <label for="fiction">Fiction</label>
+            <input type="checkbox" name="preferred" id="nonfiction">
+            <label for="nonfiction">Non-Fiction</label>
+            <input type="checkbox" name="preferred" id="mystery">
+            <label for="mystery">Mystery</label>
+            <input type="checkbox" name="preferred" id="romance">
+            <label for="romance">Romance</label>
+            <br>
+            <button type="submit" id="submitt">Subscribe</button>
+        </form>
+
+        <div id="recommendations">
+            <!-- NOTE: This is where the recommendation text is to be inserted using JavaScript. -->
+        </div>
+
+        <script>
+            // TODO: Upon form submission perform the following checks:
+            // 1. Check if the name and age fields are valid.
+            // 2. Check if the user is atleast 12 years of age.
+            let counter = 0;
+            document.getElementById("fiction").addEventListener("change", () => {
+                let mydiv = document.getElementById("recommendations");
+                if (counter%2==0) {mydiv.innerHTML = "You might enjoy The Great Gatsby!";}
+                else {mydiv.innerHTML="";}
+                counter++;
+            });
+            document.getElementById("submitt").addEventListener("click",() =>{
+                event.preventDefault();
+                let namee = document.getElementById("name").value;
+                let agee = document.getElementById("age").value;
+                console.log(agee);
+                if (namee=="" || agee=="" ) {
+                    alert("Please fill in all the fields!");
+                    return;
+                }
+                if (Number(agee)<12) {alert("You must be at least 12 years old to subscribe");}
+            });
+            // TODO: Whenever 'fiction' checbox is selected, display the recommendation
+
+            /* HINT: 
+            You can use the 'change' event listener to listen for changes to the checkbox.
+            However, this event is triggered both when checkbox is selected and when it is deselected.
+            You can differentiate between the two using the boolean 'this.checked'.
+            Remember to remove the recommendation (make it an empty string) when the user deselects fiction.
+        */
+        </script>
+    </body>
+</html>

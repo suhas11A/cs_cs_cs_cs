@@ -1,0 +1,43 @@
+<html>
+<head>
+  <title>JavaScript Array Example</title>
+  <script>
+    // Define the function that works with arrays
+    function arrayOperations() {
+      // Create an array
+      var fruits = ["Apple", "Banana", "Orange", "Mango"];
+      var output = "Initial array: " + fruits.join(", ") + "\n";
+
+      // Use the length property to get the length of the array
+      output += "Length: " + fruits.length + "\n\n";
+
+      // Add a new element using push()
+      fruits.push("Pineapple");
+      output += "After push(): " + fruits.join(", ") + "\n";
+
+      // Remove the last element using pop()
+      fruits.pop();
+      output += "After pop(): " + fruits.join(", ") + "\n";
+
+      // Sort the array alphabetically using sort()
+      output += "\nBefore sort(): " + fruits.join(", ") + "\n";
+      fruits.sort();
+      output += "After sort(): " + fruits.join(", ") + "\n";
+
+      // Reverse the array using reverse()
+      output += "\nBefore reverse(): " + fruits.join(", ") + "\n";
+      fruits.reverse();
+      output += "After reverse(): " + fruits.join(", ") + "\n";
+
+      // Display the results
+      document.getElementById("message").innerText = output;
+    }
+  </script>
+</head>
+<body>
+  <h1>JavaScript Array Example</h1>
+  <button onclick="arrayOperations()">Click me to perform array operations</button>
+  <pre id="message"></pre>
+</body>
+</html>
+

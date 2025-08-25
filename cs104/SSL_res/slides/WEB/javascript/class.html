@@ -1,0 +1,79 @@
+<html>
+<head>
+  <title>JavaScript Class Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .output {
+      margin-top: 20px;
+    }
+  </style>
+  <script>
+    // Define a class
+    class Person {
+      constructor(firstName, lastName, age) {
+        this.firstName = firstName; // Instance variable
+        this.lastName = lastName;   // Instance variable
+        this._age = age;            // _age is used for the getter/setter
+      }
+
+      // Getter for age (computed property)
+      get age() {
+        return this._age;
+      }
+
+      // Setter for age (validates and modifies property)
+      set age(newAge) {
+        if (newAge < 0) {
+          document.getElementById('output').innerHTML += "<p>Age cannot be negative!</p>";
+        } else {
+          this._age = newAge;
+        }
+      }
+
+      // Method to return full name
+      fullName() {
+        return `${this.firstName} ${this.lastName}`;
+      }
+
+      // Static method (no need for an instance)
+      static greet() {
+        document.getElementById('output').innerHTML += "<p>Hello from the Person class!</p>";
+      }
+    }
+
+    // Create two instances of the Person class
+    const person1 = new Person("Aarav", "Sharma", 25);
+    const person2 = new Person("Arti", "Shah", 18);
+
+    // Display full name
+    window.onload = function() {
+      document.getElementById('output').innerHTML += `<p>Full Name: ${person1.fullName()}</p>`;
+      
+      // Display age using getter
+      document.getElementById('output').innerHTML += `<p>Age of Person1: ${person1.age}</p>`;
+      
+      // Set new age using setter
+      person1.age = 30;
+      document.getElementById('output').innerHTML += `<p>Updated Age: ${person1.age}</p>`;
+      
+      // Set an invalid age (negative)
+      person1.age = -5;
+
+      // Call the static method
+      Person.greet();
+
+      // Display age using getter
+      document.getElementById('output').innerHTML += `<p>Age of Person2: ${person2.age}</p>`;
+      
+    }
+  </script>
+</head>
+<body>
+  <h1>JavaScript Class Example</h1>
+  <div id="output" class="output"></div>
+</body>
+</html>
+

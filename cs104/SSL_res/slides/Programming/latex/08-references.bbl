@@ -1,0 +1,23 @@
+\begin{thebibliography}{1}
+
+\bibitem{einstein1905}
+Albert Einstein.
+\newblock On the electrodynamics of moving bodies.
+\newblock {\em Annalen der Physik}, 17:891--921, 1905.
+
+\bibitem{goodfellow2016deep}
+Ian Goodfellow, Yoshua Bengio, and Aaron Courville.
+\newblock Deep learning.
+\newblock In {\em Proceedings of Machine Learning Conference}. MIT Press, 2016.
+
+\bibitem{lamport1986}
+Leslie Lamport.
+\newblock {\em LaTeX: A Document Preparation System}.
+\newblock Addison-Wesley, 1986.
+
+\bibitem{latexwebsite}
+Overleaf.
+\newblock Overleaf - online {\LaTeX} editor, 2023.
+\newblock Accessed: 2023-12-01.
+
+\end{thebibliography}

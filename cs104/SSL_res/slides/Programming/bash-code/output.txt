@@ -1,0 +1,14 @@
+This is the first line.
+This is the second line.
+This content is appended.
+Appending another line.
+This is an appended line using echo.
+Another appended line using echo.
+echo Format Column1 Column2 Column3
+echo Format Name: Sanjit, Score: 92.3578
+printf Name: Sanjit, Score: 92.36
+printf Column1    Column2    Column3   
+Writing in a loop:
+Loop Line 1
+Loop Line 2
+Loop Line 3

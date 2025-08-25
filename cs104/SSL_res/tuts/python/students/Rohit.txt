@@ -1,0 +1,11 @@
+Student Name : Rohit Kailash Reddy
+Department : ME
+Course, Credits, Grade
+Mechanics of Materials, 6, 9
+Thermodynamics, 8, 8
+Fluid Mechanics, 6, 7
+Heat Transfer, 6, 10
+Machine Design, 8, 8
+Control Systems, 6, 9
+Manufacturing Processes, 6, 8
+Engineering Materials, 4, 9

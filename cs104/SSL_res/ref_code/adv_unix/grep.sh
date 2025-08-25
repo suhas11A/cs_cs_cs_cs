@@ -1,0 +1,1 @@
+cat result.csv | grep "PASSED" | cut -d "," -f 1,2

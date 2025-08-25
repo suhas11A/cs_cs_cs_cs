@@ -1,0 +1,28 @@
+<html lang="en">
+<head>
+  <title>JavaScript Example</title>
+  <script>
+    // Inline JavaScript
+    function changeText() {
+      const message = document.getElementById('inlineMessage');
+      message.textContent = 'The text has been changed by inline JavaScript!';
+    }
+  </script>
+</head>
+<body>
+  <h1>JavaScript Example</h1>
+  
+  <!-- Paragraph modified by external JavaScript -->
+  <p id="dynamicParagraph">This paragraph is styled and modified by external JavaScript.</p>
+  
+  <!-- Button to trigger inline JavaScript -->
+  <button onclick="changeText()">Change Text via Inline JavaScript</button>
+  
+  <!-- Inline message -->
+  <p id="inlineMessage">This is the initial inline message.</p>
+  
+  <!-- External JavaScript file -->
+  <script src="external.js"></script>
+</body>
+</html>
+

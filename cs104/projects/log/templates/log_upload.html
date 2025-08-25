@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<title>Upload</title>
+<link href="{{ url_for('static', filename='css/upload.css') }}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block body %}
+
+<nav class="view_nav">
+    <br>
+    <a href="/" class="nav_link">Home</a>
+</nav>
+{% if show_links_to_other_pages_yes %}
+    <nav class="view_nav">
+        <br>
+        <a href="/" class="nav_link">Home</a>
+        <br><br><br>
+        <a href="/display" class="nav_link">Structured Log</a>
+        <br><br><br>
+        <a href="/graphs" class="nav_link">Graphs & Plots</a>
+        <br><br><br>
+        <a href="/custom" class="nav_link">Custom Plots</a>
+    </nav>
+{% endif %}
+<div id="boxes">
+    <form action="/" method="POST" enctype="multipart/form-data" id="upform">
+        <div id="outer_box">
+            <div id="box">
+                <p id="drag_drop_msg">Drag logfile here to upload or</p>
+                <input type="file" id="file" name="logfile">
+            </div>
+        </div>
+        <div id="upload_button_div">
+            <button type="submit" id="upload_button">Upload</button>
+        </div>
+        {% if message %}
+        <div class={{msg_cat}}>
+            <p id="output_message">{{ message }}</p>
+        </div>
+        {% endif %}
+    </form>
+</div>
+<script>
+    const box=document.getElementById('box');
+    const input_file=document.getElementById('file');
+    const drag_drop_msg=document.getElementById('drag_drop_msg');
+    const form=document.getElementById('upform')
+    box.addEventListener('dragover', (event)=>{
+        event.preventDefault();
+        box.style.border="3px dashed #023047";
+        drag_drop_msg.textContent="Drop to upload file";
+    });
+    box.addEventListener('dragleave', (event) => {
+        event.preventDefault();
+        box.style.border = "none";
+        drag_drop_msg.textContent = "Drag logfile here to upload or";
+    });
+    box.addEventListener('drop', event => {
+        event.preventDefault();
+        box.style.border = "none";
+        const files = event.dataTransfer.files;
+        if (!files.length) {
+            drag_drop_msg.textContent = 'No file dropped';
+            return;
+        }
+        const file=files[0]
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        input_file.files = dataTransfer.files;
+        drag_drop_msg.textContent = file.name + ' - click Upload';
+    });
+</script>
+
+{% endblock %}
+

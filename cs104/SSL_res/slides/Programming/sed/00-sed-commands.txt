@@ -1,0 +1,89 @@
+﻿
+#There is no sciprt to run here. 
+#Try each command individually and examine the output to understand what is happening
+
+
+#delete; note the original file is not deleted
+sed 'd' fruits
+sed '5d' fruits 
+sed '1,5d' fruits
+sed '/^$/d' fruits 
+sed '2,5!d' fruits 
+#Notice the comma this indicates from line to to line
+#The first regex is indicating to choose a line containing the pattern that starts with a b
+#The second regex is saying line ends in a digit
+#In fruits there are two lines post banana that end in a number. I thought it will choose the last occurance line.
+#Looks like it is choosing the first occurance line. 
+#The ber line matches the first pattern, the file is ending before hitting the digit. 
+#I would again have thought it will not delete it, but it is. Quirks like this are common in sed
+#depending on shell, things can change.
+sed '/^ba*/,/[0-9]$/d' fruits
+
+
+#substitute; Remember g is global replace all and I is case insensitive flag
+
+sed 's/wolf/fox/' bigfile
+#replace all the occurrences of the string in the line
+sed 's/wolf/fox/gI' bigfile
+#replaces the second occurrence of the word in a line
+sed 's/wolf/fox/2I' bigfile
+#replaces the third and more occurrence of the word in a line
+sed 's/wolf/fox/3gI' bigfile
+#replaces the string only on the third line. Note the file has blank lines also.
+sed '3 s/wolf/fox/' bigfile
+#replaces the string from 3rd till end last line. Note the file has blank lines also.
+sed '3,$ s/wolf/fox/' bigfile
+#replace in line starting with Later; notice regex patterns are put inside /  /
+sed '/^Later/ s/wolf/fox/gI' bigfile 
+#Complicated example; \b does word boundary match, [A-Z] matches uppercase; \1 is backreference; Without escaping i.e. \( and \), ( and ) would be treated as literal characters instead of grouping operators
+echo "Welcome To The Course CS108" | sed 's/\(\b[A-Z]\)/\(\1\)/g'
+
+
+#print
+sed '1p' bigfile
+sed -n '1p' bigfile
+sed '/scream/p' bigfile
+sed -n '/scream/p' bigfile
+
+
+#append a (after line), insert i (before line), replace c
+sed '2a tomato' fruits 
+sed '$a tomato' fruits 
+sed '/mango/a is very sweet ' fruits 
+sed '2i tomato' fruits 
+sed '$i tomato' fruits 
+sed '/mango/i is very sweet ' fruits 
+sed '/mango/c aam ' fruits 
+sed '2c aam ' fruits 
+
+
+#quit
+sed '5q' fruits
+
+
+#write to file named out; +4 means write 4 more lines after match
+sed -n '1,3w out' fruits; cat out
+sed -n '/mango/,+4w out' fruits
+
+
+#Multiple commands
+sed 's/mango/aam/; s/banana/kela/;' fruits 
+sed -e 's/mango/aam/' -e 's/banana/kela/' fruits
+#some commands like append do not work properly with semicolons
+sed '1ajuice; 2d' fruits 
+sed -e 1ajuice -e 2d fruits 
+#order matters
+echo "please fix the light bulb!" | sed 's/light/tube/g; s/bulb/light/g'
+echo "please fix the light bulb!" | sed 's/bulb/light/g; s/light/tube/g'
+
+
+#backreferencing examples
+#[^ ]* → matches a sequence of non-space characters (i.e., a single word).
+echo "AA BB CC" | sed 's/\([A-Z]\)\1/XX/g'
+sed 's/\([^ ]*\) \([^ ]*\)/\2 \1/' fruits
+echo "I have 5 apples and 3 bananas." | sed 's/[0-9]\+/[&]/g'
+
+
+#sed code in file
+sed -f 01-example.sed fruits
+

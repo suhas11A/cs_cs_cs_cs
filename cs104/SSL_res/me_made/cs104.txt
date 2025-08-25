@@ -1,0 +1,830 @@
+-------------------------------------MAKE-------------------------------------
+
+• Add -k when running make to continue running even in the face of errors and it wont build targets in which dependencies got errored while making - like the whole branch gets non built
+• Add -i when running make to ignore errors all of them and still do everything
+• -B, --always-make {Unconditionally make all targets}
+• -n {Print the commands that would be executed, but do not execute them (except in certain circumstances)}
+• Add a - before a command to suppress the error
+• Add a @ before a command to not print the command
+• Tries the following names in order: 'GNUmakefile', 'makefile' and 'Makefile'
+• Use a different name, use make -f
+• $@ is an automatic variable that contains the target name
+• $<: Represents the first prerequisite (dependency) of the rule.
+• $^: Represents all prerequisites (dependencies) of the rule
+• $?: Outputs all prerequisites newer than the target
+• $*: Stem in a static pattern
+• $() or ${}: variable substitution
+• $$(): command substitution to execute shell commands
+
+• SRC1   := $(wildcard src/src1/*.cpp)
+  OBJS_1   := $(patsubst src/src1/%.cpp,%.o,$(SRC1))
+
+• SRCS := main.cpp foo.cpp bar.cpp
+  OBJS := $(SRCS:.cpp=.o)
+
+• objable = $(shell grep -L "main" $(alll))
+  executableable = $(filter-out $(objable), $(alll))
+
+• .PHONY : clean
+  clean:
+	rm -f $(OBJS) $(MAINS)
+
+-------------------------------------GDB-------------------------------------
+
+• g++ myprogram.cpp 2>&1 | tee compilation.log - This way you can see errors in compilation and get them into a file also
+• ASSERT : Usage: You write assert(expression);. If the expression evaluates to false, assert will:
+Print an error message (including the file name and line number).
+Call abort(), terminating the program.
+Release Mode: When the NDEBUG macro is defined (commonly in release builds), all assert calls are disabled, so they don't affect performance or behavior.
+• How to use gdb? - Compile your program with the -g compiler (g++ -g -o broken broken.cpp)
+• If you put a breakpoint in a line it stops before that line
+• If you put a breakpoint for a function it stops just before the first line of that function
+• continue: continue to the next breakpoint
+• up, down: function stack
+• Examples
+	break bug.c:Compute(int) - Puts a breakpoint for function named Compute in a file named bug.c which takes int args
+	break 26 - Puts a breakpoint at line 26
+	info breakpoints - Gives information of all the break points
+	delete 2 - Delete breakpoint numbered 2
+	break 23 if i == count - 1  - puts breakpoint only if the condition evaluates to true
+	print n - Prints value of n
+	print buffer[0] = 'Z' - Changes first char of buffer to 'Z'
+	info args - Gives info of all the args when you are in a function
+	info locals - Gives info of all the local vars
+	list - Shows 5 lines of code above and below where you are rn
+	list bug.C:1 - Shows 5 lines of code above and below 1rst line of bug.c.
+	step - Steps into the function one line at a time - If you at a line with a function call in it step goes into the function and then step consecutively moves one line by line
+	next - Steps over the function ie executes the function and stops after it is done executing - In the above example it gets done with the function and stops after the function is done
+	display x - Displays the value of x now and every time it stops
+	backtrace - Shows the function call stack with their args ie what args they were called with
+	up - Moves up the function stack
+	down - Moves down the function stack
+• Shortcuts
+	break - b
+	next - n
+	backtrace - bt
+	print - p
+
+-------------------------------------Profiling-------------------------------------
+
+• Profilers allow us to examine the program's overall use of system resources– focused primarily on memory use and cpu 
+consumption– Can determine parts of code that are time consuming and need to be re-written for faster execution
+• g++ -pg -o profile profile.cpp
+• ./profile - Generates gmon.out (a binary file) {If gmon.out already exists, it will be overwritten}
+  gprof profile gmon.out > analysis.txt
+• Analyzing the output
+	Flat profile: shows the total amount of time your program spent executing each function
+	Call graph: shows how much time was spent in each function and its children can find functions that, they themselves may not have used much time, but called other functions that did!
+
+-------------------------------------UNIX-------------------------------------
+
+• ls : -a,-l,-R(Recursive listing of subdirs),-t(Sort by last mod time),-S(sort by size)
+• mkdir : -p(creates parent dirs. if not present and wont cry if the dir is already present),-v(verbose)
+• rmdir : removes only if empty : -p(removes dir and parent dir if empty),-v(verbose)
+• cp : Automatically takes last arg as final dir location or file name if only 2 args : -i(prompts before overwriting/interactive),-r(recursive copy ie dir and subdirs),-v(verbose)
+• mv : -i(interactive),-n(if file already there it skips the file)
+• rm : -r,-f,-d(removes empty dirs like rmdir),-i(interactive)
+• echo : -n(omits a trailing new line),-e(recognizes backslash-escaped characters)
+• touch : create or update timestamp :  -a(updates only the access timestamp),-m(updates only the modification timestamp),-t(specify timestamp)
+• stat : Display status of a file(shows size, Permissions and access, modify, change, birth time)
+• cat : -v(shows non-printable characters as \smth(excluding tabs and newlines)),-n(numbers output lines including blank ones),-s(show consecutive repeated empty lines as a single one),-b(numbers only non-empty lines)
+• less : view file contents one screen at a time(does not load entire file) : -N(displays line numbers),-i(makes search case-insensitive)
+• more : veiw files page by page : more +12 less.cpp(starts at 12th line),-12(for ends at 12th line)
+• head : first 10 lines : -n(how many lines to print)
+• tail : same as head, tail -n +4 file.txt {shows from line 4 to end of file}
+• wc : can use for multiple files : can use for multiple -w(words),-m(chars),-l(line),-c(bytes)
+• grep : -E(extended regex),-i(ignore case),grep "cried|could"(seaarches for literal cried|could),grep "cried\|could" bigfile(searches for cried or could),-v(invert match),-r/R(recursive if you send file names instead of word (by pipe) and want to search files use -r), -n (show line numbers with matching lines),-c(count the number of matching line),-o(print only the matched parts of a line),-w(match only whole words), -l(display only the filenames that contain the matching pattern, without showing the matching lines)
+• find : -type(search by type),-type f(files),-type d(dirs),-name(search by name),-iname(case insensitive search),-size +60k,-perm 644,find dir1/ -name "f*" -delete,
+• basename : removes the dir from path and only gives the file name and not the whole path {basename /home/fuckyou/suhas.cpp gives suhas.cpp}SSSS
+• cut : -f(feilds),-d(delimiter),--output-delimiter=" "
+• paste : -d(specify a delimiter),-s(pastes one file at a time in serial)
+• sort : -r(reverse),-n(numeric sort),sort -t ',' -k8 students.csv(sort based on 8th coloumn and everything after of students.csv with delimeter as ",")
+• uniq : Only works on adjacent lines(identifies or removes duplicates that are directly next to each other),uniq [OPTIONS] [INPUTFILE] [OUTPUTFILE](if inout or output is not gives from/to std)
+• zip : -r(recursively include directories and their contents),-e(encrypt the archive with a password)
+• unzip : -l(list the contents of the archive without extracting)
+• tar : Preserves file metadata like permissions,ownership,timestamps : -z(compress using gzip),-c(create new archive),-x(extract files),-v(verbose),-t(list without extracting),-f(specify archive name)
+• > : overwrite, >> : append, < : redirection, 1> : sends output, 2> : sends error, 
+• ./commands.sh >out 2>&1
+• ./commands.sh > /dev/null - sends 1 to null
+• ./commands.sh &> /dev/null - sends both 1 and 2 to null
+• > : sends stream output1 by default
+• /dev/null
+• $() or ` `
+• Process management : PID,PPID,init has PID 1,{Running,sleeping,stopped,zombie}
+• ps : -e(list all processes),-p <PID>(shows info of pid),aux(of all users,user-oriented format,list the processes without a controlling terminal-started on boot time and running in the background)
+• pkill : -s(signal){default is SIGTERM},-f(matches against the full command line of the processes, not just the process name),-P PID(targets child processes of the specified parent PID)
+• sudo : Asks for the current users password not the roots : if you cant do that you get suhas not in sudoers file : Entered password is cached for 15 mins wont ask till then
+• su : asks for password of the target user : -p(preserve env - like preserve env variables {like -E in sudo})
+• sudo -l : shows what are all the commands that this user can run
+• r(4),w(2),x(1) {no permission is 0} : dir must have x perm to open : user(u),group(g),others(o) | all(a)
+• chmod 641 hello.cpp : yk what it does : Only root, the file owner or user with sudo privileges can change the permissions of a file
+• chmod -R 700 dirname : Trecursively set perm to all items in folder named dirname
+• chmod g=r filename : sets group perm to r if nothing after = chmod removes all the perms
+• chmod a-x filename : removes x perm from a ie all classes
+• Sequential commands : Commands separated by a ; execute sequentially, regardless of whether the previous command succeeded or failed.
+			If the commands are seperated by && the second command executes only if the first command succeeds
+			Placing & after a command runs it in the background, meaning the shell does not wait till finishishing before moving on to the next command or returning control to you.
+
+-------------------------------------REGEX-------------------------------------
+
+• \b matches any character that is not a letter or number without including itself in the match.
+• \s matches any whitespace any number of times
+• \w means "any word character" (letters, numbers, regardless of case plus underscore)
+• Metachars
+ 	"^"  beginning of a line (Can also mean “not” if inside [])
+ 	"$" end of line
+ 	"."  match any single character
+ 	"\" escape a special character
+ 	"|" or operation i.e. match a particular character set on either side
+• Quantifiers: specifying the number of occurrences of a character
+ 	"*" Match the preceding item zero or more times
+ 	"?" Match the preceding item zero or one time
+ 	"+" Match the preceding item one or more times
+ 	"{n}" Match the preceding item exactly n times
+ 	"{n,}" Match the preceding item at least n times
+ 	"{,m}" Match the preceding item at most m times
+ 	"{n,m}" Match the preceding item from n to m times
+• () - groups patterns together
+  {} - match a particular number of occurrences (seen before)
+  [] - match any character from a range of characters– ab[xyz]c matches "abxc" and  "abyc" and "abzc"
+  [^...] matches a character which is not defined in the square bracket
+  [a-z]  matches letters of a small case from a to z
+
+-------------------------------------HTML-------------------------------------
+
+• HTML tags are not case sensitive
+• some HTML elements need not have content or closing tag. Ex:- <br>
+• <b>,<i>,<sub>,<sup>
+• Ordered list is created with  <ol> element, unordered list is created with <ul> element. In both cases each item is placed between <li> and </li>
+• Definition list is created with <dl> element, pairs of <dt> and <dd> elements are used {<dt> contains the term being defined, <dd> contains the definition}
+• Use the <a> element to define a link {<a href="./myname.html" target="_blank">My name</a>}
+• href="#section1"-takes you to the element in same page with id as section1, href="mailto:suhasalladaboina@iitb.a.in"-opens your default mail app with send filled
+• <pre> for pre formatted text ie if you put 2 spaces you see 2 spaces
+• <img src="image.jpg" alt="Description of the image" align="right">
+• <table border = "1"> - <theah> - <tr> - <th>
+			 <tbody> - <tr> - <td rowspan/colspan = "2">           {{table header(<th>), table data(<td>)}}
+• inline elements - <span>, <a>, <b>, <em>, <img>
+  block level element - <div>, <h1>, <p>, <ul>, <li>
+• <form>
+	action = "https//:....." {tells where the info should go}
+	method = "GET" OR "POST" 
+	<input> - type = "text"{one line text box} / "number"{you get a step incrementor} / "password"{hides chars} / "email"{doesn't let you submit non emails}
+			 "radio"{allow to pick one of a number of options, grouped together by name attribute, <input type="radio" id="html" name="fav_language" value="cpp">
+				 the value HTML is what gets sent to server it is not shown in the page for you to set the thing you want to see beside button you give it a label
+				 <label for="html">c++</label> gives the label c++ to the option
+			 "checkbox" {select one or more options, name is the key and value is the value that gets sent to server}
+			 	     for radio and checkbox - checked attribute means the option will be selected as default when page loads
+			 "file" {Creates a box that looks like a text input followed by a browse button, ,method has to be post, accept = ".pdf,.csv" / "application/pdf, image/jpeg"
+			 "hidden" {used to include data that is not visible or modifiable by the user the resulting POST will carry the name:value pair automatically}
+		- name = "name" / "email" / whatever you want {pairing user input with the corresponding keys in the data sent to the server}
+		- value = "smth" {that smth gets written in the input box already you can change it while filling but it is default}
+	<input type="submit" name="submit" value="Login" {creates a submit button with login written on it}
+	<input type="image" src="login.jpeg" alt="Submit" width="50">
+	<textarea name="comments" rows="4" cols="50" placeholder="Write your comments here..."></textarea> {not reco to use rows and cols to specify size use css, and thing inside tags is 													default value for the text box user can change it but that is what you see when page loads
+	<button> {element can contain various content such as text, images, or other HTML elements so more flexible than input type button}
+		 type = "submit" - default for button in a form
+			"reset" - resets the form
+			"button" - you put onclick = smth for it to do smth custom
+	<label for="button">Click this Button</label> {the for is the id for which you want to label it}
+	<select> {create drop-down or list box, Contains two or more <option> elements, name attribute is the name to be sent along with value selected, selected attribute can be used to 			  indicate the option that should be selected when the page loads, value of the value attribute is what gets sent to server}
+		  <select name="fruits">
+       		  	<option value="apple">Apple</option>
+       			<option value="cherry" selected>Cherry</option>
+   		  </select>
+• <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+
+-------------------------------------CSS-------------------------------------
+
+• <link rel= "stylesheet" href= "linking-styles.css">
+• In css file you can @import url("https//:blah_blah") (or) @import url("./css/cd.css") (or) @import "./styles.css"
+• @import url() and @import are exactly same
+• An ID selector is prefixed with a hash "#"
+• An class selector is prefixed with a dot "."
+• An universal selector is prefixed with a star "*"
+• color - Name (or) hexadecimal 6 digit number (or) RGB values
+• font-size - px (or) em {width of a letter m} (or) % {wrt to parent elements size}
+
+
+-------------------------------------JS-------------------------------------
+
+• <script src="https://www.w3schools.com/js/myScript.js"></script>
+• <script src="/js/myScript.js"></script>
+• document.getElementById("exampleForm").addEventListener("submit", (event) => {...})
+• window.onload = function () {} [and] window.onload = function () {} - these ensure that the script only runs after the entire page has been loaded html, css, images, etc
+• Functions and how they are defined in all ways
+
+function gree(name,age) {
+	return name+age;
+}
+
+var person = {
+    firstName: "",
+    lastName: "",
+    age: 0,
+    fullName: function() {
+        return this.firstName + " " + this.lastName; // Using "this" keyword
+    },
+    incrementAge: function() {
+        this.age++; // Incrementing age using "this"
+    }
+};
+
+class Person {
+    constructor(firstName, lastName, age) {
+        this.firstName = firstName; // Instance variable
+        this.lastName = lastName;   // Instance variable
+        this._age = age;            // _age is used for the getter/setter
+    }
+
+    get age() {
+        return this._age;
+    }
+
+    set age(newAge) {
+        if (newAge < 0) {
+           document.getElementById('output').innerHTML += "<p>Age cannot be negative!</p>";
+        } else {
+           this._age = newAge;
+        }
+    }
+
+    fullName() {
+        return `${this.firstName} ${this.lastName}`;
+    }
+
+    static greet() {
+        document.getElementById('output').innerHTML += "<p>Hello from the Person class!</p>";
+    }
+}
+
+• Arrays : .length(),.push(),.pop(),.sort(),.reverse()
+• Objects : contain other objects, have properties and methods in them, not like a class cant use the template again later, example given above, can access the details outside 
+• try, catch : throw "too many arguments";  ,  catch(err) {err.message has the string of the error}
+• Classes : Shown above
+• for (let i = 0; i < numbers.length; i++) {}
+• for (let x in fruits) {} - x takes the string "1" to the length of fruits
+• String s = "123";int n = Integer.parseInt(s);
+• Events : click, dblclick, mouseover, mouseout {for buttons}
+	   keydown, keyup, focus, blur, input {for inputfeilds}
+	   submit{for form}
+	   change{for select tag in html}
+	   resize, scroll {for window}
+• regex : /we[0-9]/  {
+• Dayatypes : String, Number, Bigint, Boolean, Undefined, Null, Symbol, Object
+	return !isNaN(num);
+	isInteger(vale);
+	Number(string); returns number if it is numberable and returns NaN if it is non numberable
+	String(anything); returns a string
+	toString(anything) ; makes it into string
+	typeof(vale);
+	When adding a number and a string, JavaScript will treat the number as a string
+	Any variable can be emptied, by setting the value to undefined, the type will also be undefined
+	let y = "5";let x = + y; - now x is a number
+	Empty string to a numner or null to a number makes it zero
+	Zero number to bool is false and "0" to bool is true
+
+-------------------------------------GIT-------------------------------------
+
+• working directory to local repo - checkout and commit
+• local repo to origin repo - fetch and push
+• pull = fetch + checkout {you will see the changes in the working directory itself without having to checkout}
+• add files to staging area and then commit the changes
+• .gitignore - files which you don't want git to track. Ex:- *.out, *.o, build/{this will ignore build directory in any directory inside the main}, /build/{only ignore build in main dir}
+• status - tells current branch, which files in stage and are yet to commit, which are not tracked - files in gitignore wont show up
+• git add .{all files in ./}, git add *.txt{all txt files}, git add -A{all changes including deletions}, git add -u {stage the deletions}`
+• git commit{commit the staged snapshot}, git commit -a{commit modifications of all tracked files in wor_dir ie added to staging area at some point}, git commit --amend{change last commit}
+• git commit - commits from staging area
+• git commit <file> - puts the files from working dir to staging area and then commits it
+• git log file1.txt - gives commit history of a file
+• git log --name-only --oneline {gives the commit history in one line with only the names of files that were changed}
+• git log --oneline --name-status {gives the file names along with info if they were added or modified}
+• git log -p {Shows commit diffs}
+• git log --graph --decorate --all {Visualizes branches and merges}
+• git log --since="2025-01-01" {Shows commits after a date}
+• git log --all {all commits from all branches}
+• git log --no-pager {instead of piping log to less it shows everything on terminal}{btw to go to next page on less you hit spacebar}
+• git diff <commit> {shows diff between working dir and commit}
+• git diff HEAD {shows diff between current working dir + staged changes against last commit}
+• git diff --cached <commit>, git diff <commit1> <commit2> {what should you do to commit1 to get commit2}
+• git show :file1.txt {shows file1.txt as in staging area}
+• git show commit:filename, git show HEAD:filename, git show <commit>
+• HEAD : say where am I, normally head points to a branch and the state is the last commit, every time you commit head moves to the latest commit, detached head is when you checkout a commit and then it points to commit and not the branch
+• git checkout <commit>{replace working dir with content of commit, updates head to commit, head points to a commit it says head is in detached state and commits made wont be in any branch} 
+• git checkout branch {updates head to the tip of the branch, updates the working dir, and new commits will go to that branch}
+• git checkout <commit> <path-to-file> {only that file is from that past commit}
+• can use git restore <commit> instead of checkout, restore does not move the head
+• git branch {list out the local branches}, git branch -r {list out the remote branches}, git branch -a {list all the branches}
+• git checkout <commit>; git branch <new_branch>; git switch <new_branch> {creates a new branch from that state, and move to that branch}
+• git switch -c <new_branch> {or} git checkout -b <new_branch> {makes the branch and switches to it} [[git switch <branch> and git checkout <branch> are same but first is newer method]]
+• git branch -d <branch> {deletes the branch but doesn't if the branch is not fully merged} {use -D to force}
+• git branch -d <old_name> <new_name> {rename the branch}
+• git merge -m "merging" <name> {will merge the <name> into current branch} {if conflicted then resolve conflicts, then add, then commit} {note that <name> still exists after merging>}
+• git reset --hard HEAD~1 { deletes the most recent commit}
+
+-------------------------------------BASH-------------------------------------
+
+• #!/usr/bin/env bash or #!/bin/bash {when you run it by ./bash.sh os(shell) will find the program to run by interpreting #! but is a comment when executed, can put python path for python}
+• #(sharp in programming) + !(bang in unix) -- called as shebang
+• echo "iii\tiii" ---- iii\tiii
+• echo -e "iii\tiii" ---- iii	iii
+• echo -e "In white \e[32mThis is in red\e[0mThis is white again"
+• echo word      word ---- word word
+  echo "word    word" ---- word    word
+• Bash variables are character strings, but depending on context permits integer operations
+• no space before or after the "=", variables are referred by $var but ${var} is preferred {{greet="hello world"; greet=hello these both work}{greet=hello world wont work}
+• myVariable="Hello\n"
+  echo myVariable  ----  myVariable
+  echo $myVariable  ----  Hello\n
+  echo -e "$myVariable"  ----  Hello and a new line {double quotes preserve except $,`,\}
+  echo '$myVariable'  ----  $myVariable  {single quotes preserve the entire thing as it is and cant do var substitution and command substitution}
+• var="abc	xyz"
+  num="123"
+  echo 1 $var$num  ----  abc xyz123
+  echo 3 "${var}XX${num}"  ----  abc      xyz123
+• lsResult=$(ls) [and] directory=`pwd`  {command substitution in variables}
+• ls *.sh {lists all .sh files}, ls "*.sh" {lists if there is a file named *.sh}
+• command env shows all env variables {HOME, PWD, OSTYPE, BASH, BASH_VERSION, LOGNAME}
+• maths
+	let "a=1" (or) let "a=a+1"
+	let is a command whose success or failure is determined by the value of expression i.e let "a=0" return non-zero exit status and vice-versa {`let a=1` also works for simple cases}
+	`let a=1+3` works; `let a = 1+1` doesn't; `let "a = 1+3"` works;
+	$[] {deprecated now} and $(()) {used for arithmetic ex:- a=$((3+4))} {unlike let the exit status doesn't depend on the value of expression}
+	Use let when doing inline arithmetic operations that modify variables and Use $(( )) when you need arithmetic expansion and want to directly assign the result
+	Bash does not support floating-point arithmetic natively; use bc (basic calculator) command instead
+		By default, bc performs integer arithmetic; use -l option for float
+		echo "scale=2; 5 / 2" | bc -l  ----  2.50 {default is 20 digits precision ig}
+		echo "a=10; b=3; a/b" | bc -l  ----  a, b are not persisted outside this one bc session
+	Can use declare -i to make a variable integer-only{ex:- declare -i num; num=9}{if you then do num=er it will ignore it set num to zero}{if you give floating point it will round down ig}
+	num=5*2+1; echo $num  ----  5*2+1
+	let num=5*2+1; echo $num  ----  11
+	echo $[3*2] {deprecated} (or) echo $((3*2)) (or) echo "$((3*2))" ----  6  [[btw using qoutes is better if spaces  are there etc]]
+	supported by $(()) - a+b, a/b, a++, a*b, a**b, a--, a%b, a==b, a>b, a<b, a&&b, a||b, !a{will output 0 and 1 for Booleans}
+	supported by bc - sqrt(a)
+	echo $((4/3))  ----  1
+	x=5; ((x+=2)); echo $x  ----  7
+• operators supported by bash - arithmetic {+,-,*,/,**,%}
+				comparison {-eq, -ne, -gt, -lt, -ge, -le} {&& Runs if True, || Runs if False}    `[[ $a -eq $b ]] && echo "a is equal to b" || echo "a is not equal to b"`
+				logical {&&, ||, !}    `[[ $a -gt 5 && $b -lt 30 ]] && echo "Both conditions met (AND)"`
+				string {=, !=, -z, -n}    `[[ -z $str3 ]] && echo "String is empty"`
+				file {-e, -f, -d, -r, -w, -x, -s} {exists, exists and regular, dir, readable, writable, executable, not empty} {-d "/path/to/directory"}	
+				bit-wise {>>, <<, &, |, ~, ^}
+				assignment {=, +=, *=, %=}
+• Conditionals
+----if (( x > 15 && b < 12222)); then
+        echo "3: x is greater than 15"
+    elif (( x > 5 )); then
+        echo "3: x is greater than 5 but less than or equal to 15"
+    else
+        echo "3: x is less than or equal to 5"
+    fi
+----if [[ $a -gt 13 && $b -lt 5 ]]; then
+        echo "Condition met"
+    fi
+----if [[ "$name" == "Sunita" ]]; then
+        echo "4: Hello, Sunita!"
+    else
+        echo "4: Hello, Stranger!"
+    fi
+
+----string="Hello, World!"
+    pattern="^Hello"
+    if [[ $string =~ $pattern ]]; then
+	echo "The string starts with 'Hello'."
+    else
+	echo "The string does not start with 'Hello'."
+    fi
+
+----if ls nonexistent_directory &>/dev/null; then
+        echo "6: Directory exists!"
+    else
+        echo "6: Error: Directory does not exist!"
+    fi
+• Feature               | (( ))                                  | [[ ]]
+----------------------------------------------------------------------------------------------------------------
+  Purpose               | Arithmetic evaluation                  | String and conditional testing
+  Usage                 | Math operations and comparisons        | String comparisons, regex
+  Variables             | No $ needed (e.g., ((++x)))            | $ needed for variables (e.g., [[ $x -gt 5 ]])
+  String Comparison     | Not supported                          | Supports string comparison and regex
+  Logical Operators     | Only basic arithmetic comparison       | Supports logical operators (&&, ||)
+                        | (==, !=, >, <)                         |
+  Return Value          | Numeric result (0 or non-zero)         | Boolean (true or false)
+• Loops {break, continue as you know (no semi-colon required btw)}
+----for fruit in apple banana cherry; do		----while (( count <= 5 )); do
+        echo "Fruit: $fruit"				        echo "Count: $count"
+    done						        (( count++ ))
+----for i in {1..5}; do					    done
+        echo "Number: $i"				----while [[ $word != "" ]]; do
+    done						        echo "$word"
+----for file in $(ls); do				        word=${word:1}
+        echo "File: $file"				    done
+    done
+----until (( count > 5 )); do
+        echo $count
+        ((count++))
+    done
+• shell variables
+	$0 - script name
+	$1, $2, $3 - arguments to the script
+	$# - Number of arguments
+	$@ - All arguments as separate words (i.e a set of strings)
+	$* - All arguments as a single string (i.e. one string)
+	$? - Exit status of the last command (0 = success, nonzero = failure)
+	$$ - Process ID (PID) of the current shell
+	$_ - Last argument of the last command {echo hello world, echo "hello world" - last arguments are "world" and "hello world" respectively}
+• Functions : bash functions accept arguments just like scripts {$*, $#, $1, $2… (no explicit arguments)}, do not return values in usual way{Use echo to return output, Use return for exit codes
+----greet() {
+        echo "Hello, $1!"
+    }  #We can get the function output as `myString=$(greet "Alice")` or by just calling greet "Alice" you can get it to the terminal
+----factorial() {
+        if [[ $1 -le 1 ]]; then
+            echo 1
+        else
+            local temp=$(( $1 - 1 ))
+            local result=$(factorial "$temp")
+            echo $(( $1 * result ))
+        fi
+    }  #Can do recursive functions as well
+----Default is exit code 0 i.e return 0, for errors you put return values {exit 1:Terminates the entire shell process or script, return 1 : exit status from that function}
+    Like cpp global and local variables, declared out of any function are global, can shadow global variables by local vars and original ones come back after local goes out of scope	
+    Environment variables are global - Inherited by any child shells or processes
+    Global can be modified anywhere in the script, global declared without the keyword local
+    Exported Variables: Declared using export to make them available to child processes (subshells)– Useful when running another script or program from the current scrip {`export X="hello"`}
+----functt() {
+	a=9
+	echo $a # 9
+	local a=2 #shadows the global till it goes out of scope
+	echo $a # 2
+    }
+    echo $a # 9
+• file reading
+	Method 1 - res=`cat file.txt`; cat "${res}"
+	Method 2 - val=$(<file.txt); echo "$val"
+	Method 3 - 
+		read: This is a built-in command that reads a line from standard input; In this case, from the file specified by redirection at the end
+		
+                file='file.txt'
+                i=1  
+                if [ -f "$file" ]; then
+                    while read line; do  
+                        #Reading each line  
+                        echo "Line No. $i : $line"  
+                        i=$((i+1))  
+                    done < $file
+                else
+                    echo "File not found: $file"
+                fi
+	Method 4 - 
+        	for file in $(ls); do
+		    echo $file
+		done
+• file writing {there is some printf formatting look at it if you want I am not in the fucking mood to read formatting tools}
+	#### 1. Overwrite the file using cat <<EOF
+	cat <<EOF > "$FILE"
+	This is the first line.
+	This is the second line.
+	EOF
+	#### 2. Append more lines using cat <<EOF
+	cat <<EOF >> "$FILE"
+	This content is appended.
+	Appending another line.
+	EOF
+	#### 3. `echo "This is an appended line using echo." >> "$FILE"`
+	#### 4.
+	while read -r line; do
+    		echo "$line" >> "$FILE"
+	done <<EOF
+	Loop Line 1
+	Loop Line 2
+	Loop Line 3
+	EOF
+• arrays
+	fruits=("Apple" "Banana" "Cherry")
+	fruits[3]="Orange"
+	echo "All Fruits: ${fruits[@]}"    # Print all elements
+	echo "Number of Fruits: ${#fruits[@]}"    # Print the length of the array
+	for fruit in ${fruits[@]}; do
+	    echo "$fruit"
+	done
+	
+	unset fruits[1]
+	
+	declare -A capitals    # Declare an associative array (Requires declare -A)
+	capitals["France"]="Paris"
+	capitals["Japan"]="Tokyo"
+	capitals["USA"]="Washington D.C."
+	capitals["India"]="New Delhi"
+	echo "Countries: ${!capitals[@]}"
+	echo "Capitals: ${capitals[@]}"
+	for country in "${!capitals[@]}"; do
+	    echo "$country - ${capitals[$country]}"
+	done
+	unset capitals["USA"]
+	IFS=$'\n' sorted=($(sort <<<"${array[*]}")) {sorts the array, elements can have space in them as long its not a new line}
+	unset IFS
+
+-------------------------------------SED-------------------------------------
+
+• sed 'address(es) s/pattern/replacement/[flags]' filename {sed 's/hi/hello/' file.txt}
+• sed -f commands.sed file.txt
+• sed 'ADDRESSd' filename { '1,5d' (delete lines 1 to 5)}
+• sed '/PATTERN/d' filename {'/^$/d' (remove empty lines)}
+• Flags: a number indicating the occurrence, g: global{replace all occurrences of pattern}, p: print contents, I: case insensitive
+• echo "Welcome To The Course CS104" | sed -E 's/(\b[A-Z])/(\1)/g'
+• sed 'ADDRESSp’ filename, sed  '/PATTERN/p' filename {print} - {Often used with the -n option}
+• sed '/mike/!p' {prints everything except lines with mike}
+• sed -En '/^mike/!p' me.txt {prints lies without mike at start}
+• sed '2a tomato' fruits {adds a new line with text tomato after 2nd line}
+• sed '/aam/a mango' exp.txt {adds a new line with word mango after lines with aam}
+• a-append, i-inserts, c-replace {all same syntax as append}
+• a adds new line after match with content, i puts a line before match, c replaces the whole line
+• sed '5q' fruits (print first 5 lines and quits)
+• sed 's/mango/aam/; s/banana/kela/;' fruits (or) sed -e 's/mango/aam/' -e 's/banana/kela/' fruits
+• Can reference previously captured *groups* that match some regular expression pattern {echo "AA BB DS" | sed -E 's/([A-Z])\1/XX/g' will result in XX XX DS}
+• & is used to reference the entire matched pattern { echo "I have 5 apples and 3 bananas." | sed 's/[0-9]\+/[&]/g' results in "I have [5] apples and [3] bananas"}
+• sed -E 's/[0-9]+/[Age: &]/g' sample.txt {suhas, Alladaboina, 18, Student -> Suhas, Alladaboina, [Age: 18], Student}
+• -i option: modify files
+
+-------------------------------------AWK-------------------------------------
+
+• BEGIN {action}
+  pattern {action}
+  pattern {action}
+  END {action}
+• awk '{print}' file1.txt file2.txt
+• BEGIN { print "List of jpg files:" }
+  /\.jpg$/ { print }
+  END { print "All done!" }
+• $0 represents the entire input line, $1, $2, ... refer to the individual fields
+• NR: Number of records (lines) processed so far
+  NF: Number of fields in the current record
+  FS: Input field separator (default is whitespace), OFS: Output field separator (default is space)
+  RS: Input record separator (default is newline \n), ORS: Output record separator (default is newline \n
+• awk '{
+    # Multiply the second field by 2 and add the first field
+    result = $1 + $2 * 2;
+    print "Sum of first field + second field * 2 = ", result
+}' students.tsv
+• if ($2 >= 30 && $3 == "Engineer") {
+      print $1 " is an Engineer and older than or equal to 30.";
+• if ($1 ~ /^test/) {print match} [[~ for match and !~ for non match]]
+• grades["Amit"] = 85;
+  grades["Priya"] = 92;
+  grades["Raj"] = 78;
+  grades["Neha"] = 95;
+  for (name in grades) {
+      print "Student:", name, "=> Grade:", grades[name];
+  }
+  delete grades["Raj"];
+• length(str), substr(str, 3, 5) #if str="asdfghjk" we get "dfghj", index(str, "AWK"), split(str, arr, ","), tolower(str), toupper(str)
+• formatted = sprintf("Formatted number: %.2f", num); print formatted  {Similar to printf, except returns the formatted string as a value}
+• sqrt(x), int(x), sin(x), cos(x)
+• getline name < "-";  {from std input}
+• while (getline line < "fruits") {
+      print "Read line: " line
+  }
+• system("ls"), systime(), ENVIRON["PATH"]
+• {FS=",";OFS="\t"; $1=$1;print} works {OFS="\t"; $1=$1; print $0} works but {OFS="\t"; print $0} doesnt cuz you need to change the $0 for awk to recontruct it or else it stay the original line
+• awk -F, "{print}" students.csv {-F says the feild seperator}
+• awk -v min_age=9 "{if ($1>min_age) {print} }" students.csv {-v is used to pass variables to the script}
+• column -t -s $'\t'
+
+-------------------------------------PYTHON-------------------------------------
+
+• x = 20.123, large_number = 12123333, c = 2 + 1j  # c is a complex number
+• print('09', '12', '2016', sep='-', end='@'), print(f"i am {name} and I'm {age} old."), print(f"{x:.1f}") # output 20.1, print(f"Comma-separated: {large_number:,}") # output is 12,123,333
+• type(x), len(my_array), len(my_tuple)
+• str.upper(), str.lower(), str.strip(), str.replace("1", "l") # Replace all occurrences
+• pass  # Placeholder for future code
+• my_array[3:11:2] {get 3,5,7,9 indexed elements}
+• my_fruits[1:2] = ["blackcurrant", "watermelon"] # Whatever used to be first element is now gone and we have and array of length one more than original
+• my_fruits[1:3] = ["watermelon"] # Length decreased by one
+• my_fruits.insert(2, "watermelon") # Insert at index 2
+• my_fruits.remove("orange")  # Removes the first occurrence, my_fruits.pop(1) # Removes the item at index 1
+• my_fruits.pop() # Removes last element
+• del my_fruits, del my_list[1:4], del my_fruits[1]
+• fruits.sort(), fruits.sort(reverse=True), fruits.reverse(), fruits_copy = fruits.copy(), fruits.count("apple"), index_banana = fruits.index("banana"), fruits.clear() # fruits is now []
+• tuples : indexing, slicing, adding to another tuple, multipying with integer, .coutn("smth") method, del, .index() same as list and unpack as '(a, b, c) = tuple1'
+• list(interable) can be used to make list, tuple(iterable) for making a tuple
+• range([start, stop, step]) {start and step are optional} {stop is not incuded it goes till before stop}
+• tuple - ordered unmutable
+• set and dictionary - see ref code for all operations
+• comprehension - even_numbers = [x for x in range(10) if x % 2 == 0], flattened = [item for sublist in matrix for item in sublist], [(i, j) for i in range(width) for j in range(height)]
+• sorted_students = sorted(students, key=lambda x: x[1]), 
+• def myfunc():
+      global x
+      x = "fantastic"
+• x = re.search("^The.*Spain$", txt)
+  print("a) Does the text match the pattern?:", x, bool(x))
+• x = re.split("\s", txt), sys.argv
+• file reading and writing (w,a,r)
+  with open("output.txt", "r") as file:
+      print("\nReading file line by line:")
+      for line in file:
+          print(line, end="")
+
+  with open("output.txt", "w") as file:
+      file.write("This is a line in the file.\n")
+      file.write("This is another line in the file.\n")
+
+  with open("output.txt", "r") as file:
+      content = file.read()
+      print(content)
+
+  with open("output.txt", "r") as file:
+      print("\nReading file line by line:")
+      line = file.readline()  # Read the first line
+      while line:
+          print(line, end="")
+          line = file.readline()  # Read the next line
+• try:
+    file = open("file.txt", "r")  # May raise FileNotFoundError
+    content = file.read()
+    print("File content:\n", content)
+  except FileNotFoundError:
+    print("File not found! Please check the filename.")
+  finally:
+    print("Executing cleanup...")
+    file.close()
+• class Car:  ## __str__, __len__, __getitem__
+      def __init__(self,x):
+	self.blah = x
+• setattr(obj, "another_property", 100)
+
+-------------------------------------MATPLOTLIB-------------------------------------
+
+• plt.plot(x, y, format_string, **kwargs)
+• color or c, linestyle or ls, linewidth or lw, marker, markersize or ms, markerfacecolor or mfc, markeredgecolor or mec, markeredgewidth or mew, alpha, zorder, label
+• plt.plot(x1, y1, 'bo-', x2, y2, 'rs--')
+• plt.title("Sports Watch Data", fontdict=font1, loc='left')
+  plt.xlabel("Average Pulse", fontdict=font2)
+  plt.ylabel("Calorie Burnage", fontdict=font2)
+  plt.plot(x, y, label="Calories vs Pulse")
+  plt.grid(axis='y') # plt.grid(True)
+  plt.legend(loc='upper left')
+  plt.show()
+• plt.subplot(1, 2, 1)
+  plt.plot(x, y, 'b-o', label='Sales')
+  x = np.array([0, 1, 2, 3])
+  y = np.array([10, 20, 30, 40])
+  plt.subplot(1, 2, 2)
+  plt.plot(x, y, 'r--', label='Income')
+  plt.legend(loc='upper left')
+  plt.show() 
+• plt.scatter(x1, y1, color='red', label="Group 1")
+  plt.scatter(x2, y2, color='red', label="Group 2")
+  plt.show()
+• x = np.random.randint(100, size=(100))  
+  y = np.random.randint(100, size=(100))
+  colors = np.random.randint(100, size=(100))
+  sizes = np.random.randint(100, size=(100))
+  plt.scatter(x, y, 
+              c=colors,        # Color each point according to the value in 'colors' array
+              s=sizes,         # Size each point according to the value in 'sizes' array
+              alpha=0.6,       # Transparency of the points; 0 is fully transparent, 1 is fully opaque
+              cmap='nipy_spectral') # Color map to map 'colors' to specific colors;'nipy_spectral' is a built-in colormap but you can try 'viridis', 'plasma', 'inferno', etc
+  plt.colorbar()
+  plt.show()
+• x = np.array(["A", "B", "C", "D"])
+  y = np.array([3, 8, 1, 10])
+  plt.bar(x, y, color='r', width=0.5)
+  plt.show()  # Show the plot
+• y = np.array([35, 25, 25, 15])
+  mylabels = ["Apples", "Bananas", "Cherries", "Dates"]
+  plt.pie(y, labels=mylabels)
+  plt.show()
+• data = np.random.randn(1000)
+  plt.hist(data, bins=30, edgecolor='black')
+  plt.title("Histogram")
+  plt.show()
+
+-------------------------------------NUMPY-------------------------------------
+
+• np.arange(0, 10, 2)           # array([0, 2, 4, 6, 8])
+• np.linspace(0, 1, 5)          # array([0.  , 0.25, 0.5 , 0.75, 1.  ])
+• np.zeros(shape,      dtype=float)  
+• np.ones(shape,       dtype=float)  
+• np.empty(shape,      dtype=float)  
+• np.full(shape, fill_value, dtype=None)
+• np.eye(3)                      # 3×3 identity
+• np.identity(4)                 # same as eye(4)
+• np.eye(N, M=None, k=0, dtype=float, order='C')
+• np.tri(3, 4, k=0)              # [[1,0,0,0],[1,1,0,0],[1,1,1,0]]
+• np.tril([[1,2],[3,4]])         # [[1,0],[3,4]]
+• np.triu([[1,2],[3,4]], k=0)    # [[1,2],[0,4]]
+• for idx in np.ndindex(2,3):
+    print(idx)  #(0,0),(0,1),(0,2),(1,0),(1,1),(1,2)
+• for idx, val in np.ndenumerate([[1,2],[3,4]]):
+    print(idx, val)  #(0,0) 1; (0,1) 2; etc
+• a = np.arange(6)                 # [0,1,2,3,4,5]
+  a.reshape((2,3))                 # [[0,1,2],[3,4,5]]
+• np.resize([1,2,3], (2,4))  #[[1,2,3,1],[2,3,1,2]]
+  a = np.array([[1,2],[3,4]])
+  a.ravel()                      # [1,2,3,4]  (view)
+  a.flatten()                    # [1,2,3,4]  (copy)
+• a = np.zeros((2,3,4))
+  a.transpose(2,1,0).shape      # (4,3,2)
+  a.swapaxes(0,2).shape         # (4,3,2)
+• a = np.array([1,2,3])            # shape (3,)
+  b = np.expand_dims(a, 0)         # shape (1,3)
+  c = np.expand_dims(a, 1)         # shape (3,1)
+• np.concatenate(([1,2],[3,4]))    # [1,2,3,4]
+• a = [1,2]; b = [3,4]
+  np.stack((a,b), axis=0)         # [[1,2],[3,4]]
+  np.hstack((a,b))                # [1,2,3,4]
+  np.vstack((a,b))                # [[1,2],[3,4]]
+  np.dstack((a,b))                # [[[1,3],[2,4]]]
+  np.split([1,2,3,4], 2)          # [[1,2], [3,4]]
+• a.min(), a.max()       # minimum and maximum
+  a.argmin(), a.argmax() # index of min / max
+  a.ptp()                # “peak to peak”: max–min
+  a.sum(), a.prod()      # sum and product of all elements
+  a.cumsum(), a.cumprod()# cumulative sum / product
+  a.mean()               # arithmetic mean
+  a.average(weights=w)   # weighted average
+  np.median(a)           # median
+  a.std(), a.var()       # standard deviation & variance
+• np.where([True, False, True])        # (array([0,2]),)
+  np.where(a>0, a, 0)                  # replace negatives with 0
+  np.argwhere(a>5)         # [[i,j], …] for each element >5
+  asdf[np.isnan(asdf)] = 0.0
+  print(asdf)
+• np.sort([3,1,2])         # [1,2,3]
+• m = np.arange(9).reshape(3,3)
+  m.diagonal()             # [0,4,8]
+  np.trace(m)              # 12
+• np.repeat([1,2,3], 2)    # [1,1,2,2,3,3]
+• np.tile([1,2], 3)        # [1,2,1,2,1,2]
+• np.linalg.norm(v, axix=1)
+  np.linalg.det(A)
+  np.linalg.inv(A)
+  np.linalg.solve(A, b)
+  np.linalg.eig(A) → (w, v)
+  np.linalg.svd(A)
+  np.linalg.pinv(A)
+  np.linalg.qr(A)
+• np.random.seed(0)           # reproducibility
+  np.random.rand(2,3)         # uniform [0,1), shape (2,3)
+  np.random.randn(4)          # standard normal, shape (4,)
+  np.random.randint(low, high, size)    # random ints
+  np.random.random_sample((2,2))        # same as rand
+  np.random.choice(a, size, replace=True) # sample from 1D array or range
+  np.random.shuffle(a)         # shuffle in-place
+  np.random.permutation(a)     # return shuffled copy
+• data = np.loadtxt('file.csv', delimiter=',')    
+  np.savetxt('out.txt', data, fmt='%.2f')
+• np.save('arr.npy', a)        # binary .npy format
+  b = np.load('arr.npy')
+• b = a.view() 
+  b = a.copy()
+• np.random.seed(42)
+  S=1000000
+  # sampling from each of the six distributions
+  beta = 100*np.random.beta(a=4, b=20, size=S)
+  exponential = 100*np.random.exponential(scale=0.1, size=S)
+  gamma = 100*np.random.gamma(shape=2.0, scale=0.1, size=S)
+  laplace = 100*np.random.laplace(loc=0.0, scale=0.5, size=S)
+  normal = np.random.normal(loc=0.0, scale=3.0, size=S)
+  poisson = np.random.poisson(lam=3, size=S)
+• np.dot(a, b, out=None)
+  Dot product of two arrays. Specifically,
+    If both a and b are 1-D arrays, it is inner product of vectors (without complex conjugation).
+    If both a and b are 2-D arrays, it is matrix multiplication, but using matmul or a @ b is preferred.
+• np.matmul(A, B) - Matrix product of two 2-D arrays. Supports broadcasting on the first dimensions when either operand >2-D.
+  A @ B - Shorthand for np.matmul(A, B)
+  Dot product - np.dot(A, B)
+  Multiple products - np.linalg.multi_dot([A, B, C, …])
+  Matrix power - np.linalg.matrix_power(A, n)
+
+-------------------------------------RANDOM-------------------------------------
+
+• random.seed(42)
+  random.random()  # Basic uniform on [0,1)
+  random.uniform(10, 20)  # Float between 10 and 20
+  triangular(low, high, mode)  # Triangular distribution (peak at mode).
+  random.randint(1, 6)
+  random.randrange(0, 101, 5)  # multiples of 5, ex:-85
+  random.choice(['rock','paper','scissors'])  #'paper'
+  random.choices(['A','B','C'], weights=[10,1,1], k=5)  # ['A','A','C','A','B']
+  cards = [1,2,3,4,5]; random.shuffle(cards)
+  random.sample(range(100), 5)  # [42, 7, 89, 13, 68]
+  random.gauss(0, 1)  # normal, ex:-0.6324303558446933
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

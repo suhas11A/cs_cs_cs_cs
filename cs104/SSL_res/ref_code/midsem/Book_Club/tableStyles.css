@@ -1,0 +1,26 @@
+/* TODO: Add border around table */
+#subscription-plans-table {
+    border-style: solid;
+    border-width: 0.5px;
+}
+
+/* TODO: Add border and increase font size for each cell */
+th,td {
+    border-style: solid;
+    border-width: 0.5px;
+    font-size: 120%;
+}
+
+/* TODO: Style the 'Subscribe Now!' hyperlink like a button  */
+#subscribe-btn {
+    text-decoration: none;
+    border-style: solid;
+    border-width: 0.5px;
+    border-radius: 8px;
+    color: black;
+    background-color: aqua;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
+}

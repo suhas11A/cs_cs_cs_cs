@@ -1,0 +1,95 @@
+<html>
+<head>
+    <title>JavaScript Variables and Operations</title>
+    <script>
+  
+        // Using const (for values that should not be changed)
+        const pi = 3.14159;
+        console.log("Value of pi:", pi);  // Outputs: 3.14159
+
+        // Using let (for values that may change)
+        let age = 25;
+        console.log("Age before increment:", age);  // Outputs: 25
+
+        // Using var (old way, not recommended)
+        var oldVariable = "I'm a legacy variable";
+        console.log(oldVariable);  // Outputs: I'm a legacy variable
+
+        // Automatically declared (not recommended, not good practice)
+        x = 10;  // This is an implicit global variable
+        console.log(x);  // Outputs: 10
+
+        // Arithmetic Operators (+, -, *, /, %, **)
+        let sum = 10 + 5;      // Addition
+        let difference = 10 - 5;  // Subtraction
+        let product = 10 * 5;   // Multiplication
+        let quotient = 10 / 5;  // Division
+        let remainder = 10 % 3;  // Modulus (remainder)
+        let power = 2 ** 3;    // Exponentiation
+
+        console.log("Sum:", sum);  // Outputs: 15
+        console.log("Difference:", difference);  // Outputs: 5
+        console.log("Product:", product);  // Outputs: 50
+        console.log("Quotient:", quotient);  // Outputs: 2
+        console.log("Remainder:", remainder);  // Outputs: 1
+        console.log("Power:", power);  // Outputs: 8
+
+        // Increment and Decrement (++, --)
+        age++;  // Increment age by 1
+        console.log("Age after increment:", age);  // Outputs: 26
+
+        age--;  // Decrement age by 1
+        console.log("Age after decrement:", age);  // Outputs: 25
+
+        // Comparison Operators (<, >, <=, >=, ==, !=)
+        let isGreaterThan = 10 > 5;  // true
+        let isLessThan = 5 < 10;  // true
+        let isEqual = 5 == '5';  // true (loose equality, because '5' is converted to 5)
+        let isStrictEqual = 5 === '5';  // false (strict equality, types do not match)
+        let isNotEqual = 5 != '5';  // false (loose inequality)
+
+        console.log("isGreaterThan:", isGreaterThan);  // true
+        console.log("isEqual (loose):", isEqual);  // true
+        console.log("isStrictEqual:", isStrictEqual);  // false
+        console.log("isNotEqual:", isNotEqual);  // false
+
+        // Logical Operators (&&, ||, !)
+        let hasPermission = true;
+        let isAdmin = false;
+
+        let canAccess = hasPermission && isAdmin;  // false, both must be true for && to be true
+        let isAllowed = hasPermission || isAdmin;  // true, one of them must be true for || to be true
+        let notAdmin = !isAdmin;  // true, negates the value of isAdmin
+
+        console.log("Can Access (has permission and is admin):", canAccess);  // false
+        console.log("Is Allowed (has permission or is admin):", isAllowed);  // true
+        console.log("Is not Admin:", notAdmin);  // true
+
+        // Conditional Operator (Ternary operator)
+        let message = age >= 18 ? "You are an adult." : "You are a minor.";
+        console.log(message);  // Outputs: You are an adult.
+
+        // Using functions to demonstrate variable scope (let and const)
+        function demoScope() {
+            const constantValue = 100;  // Block-scoped constant
+            let variableValue = 50;  // Block-scoped variable
+            
+            console.log("Inside function, constantValue:", constantValue);  // 100
+            console.log("Inside function, variableValue:", variableValue);  // 50
+            
+            // Updating the variable
+            variableValue = 75;
+            console.log("Inside function after update, variableValue:", variableValue);  // 75
+        }
+
+        demoScope();
+        // Outside the function, we cannot access constantValue or variableValue
+        // console.log(constantValue);  // Error: constantValue is not defined
+        // console.log(variableValue);  // Error: variableValue is not defined
+    </script>
+</head>
+<body>
+    <h1>JavaScript Variables and Operations</h1>
+    <p>Check the browser's developer console for output!</p>
+</body>
+</html>

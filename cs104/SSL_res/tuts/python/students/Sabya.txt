@@ -1,0 +1,15 @@
+Student Name : Sabyasachi Samantaray
+Department : EE
+Course, Credits, Grade
+Circuit Theory, 6, 9
+Signals and Systems, 4, 8
+Electromagnetic Fields, 8, 7
+Digital Electronics, 6, 10
+Power Systems, 8, 8
+Control Systems, 6, 9
+Microelectronics, 6, 8
+Communication Systems, 4, 9
+Electric Machines, 6, 7
+Renewable Energy Systems, 8, 10
+Power Electronics, 6, 8
+Embedded Systems, 4, 9

@@ -1,0 +1,74 @@
+<html>
+
+<head>
+  <title>Conditionals and Loops Example</title>
+</head>
+
+<body>
+
+  <div id="output"></div>
+
+  <script>
+    // Numeric Variable
+    let number = 5;
+
+    // Checking if the number is even or odd
+    // Backticks allow you to use template literals, which allows String Interpolation:
+    // The ${} syntax inside backticks is used for string interpolation
+    // Allows embedding expressions, such as variables, directly into strings without needing to concatenate them with +
+
+    if (number % 2 === 0) {
+      document.getElementById('output').innerHTML += `<p>The number ${number} is even.</p>`;
+    } else {
+      document.getElementById('output').innerHTML += `<p>The number ${number} is odd.</p>`;
+    }
+
+    // Array of numbers (numeric array)
+    let numbers = [1, 3, 5, 7, 9, 10, 12, 15];
+    document.getElementById('output').innerHTML += `<p>Original numeric array: ${numbers.join(", ")}</p>`;
+
+    // Using a 'for' loop to go through the numeric array
+    let evenNumbers = [];
+    for (let i = 0; i < numbers.length; i++) {
+      if (numbers[i] % 2 === 0) {
+        evenNumbers.push(numbers[i]); // Collecting even numbers
+      }
+    }
+    document.getElementById('output').innerHTML += `<p>Even numbers (using 'for' loop): ${evenNumbers.join(", ")}</p>`;
+
+    // Using a 'while' loop to print odd numbers from the numeric array
+    let oddNumbers = [];
+    let j = 0;
+    while (j < numbers.length) {
+      if (numbers[j] % 2 !== 0) {
+        oddNumbers.push(numbers[j]); // Collecting odd numbers
+      }
+      j++;
+    }
+    document.getElementById('output').innerHTML += `<p>Odd numbers (using 'while' loop): ${oddNumbers.join(", ")}</p>`;
+
+    let fruits = ["apple", "banana", "cherry", "mango", "orange"];
+
+    // Using a for...in loop to iterate over the array (indexes)
+    let output = "";
+    for (let x in fruits) {
+      output += `<p>Fruit at index ${x}: ${fruits[x]}</p>`;
+    }
+    document.getElementById('output').innerHTML += output;
+
+
+    // Using a 'while' loop to check for fruits that have more than 5 letters
+    let longFruits = [];
+    let k = 0;
+    while (k < fruits.length) {
+      if (fruits[k].length > 5) {
+        longFruits.push(fruits[k]); // Collecting fruits with more than 5 letters
+      }
+      k++;
+    }
+    document.getElementById('output').innerHTML += `<p>Fruits with more than 5 letters (using 'while' loop): ${longFruits.join(", ")}</p>`;
+  </script>
+
+</body>
+
+</html>

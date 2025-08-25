@@ -1,0 +1,45 @@
+\documentclass[12pt, letterpaper]{article}
+
+% Include title and date
+\title{Typesetting Mathematics in LaTeX}
+\date{\today}
+
+\begin{document}
+
+% Print the title
+\maketitle
+
+\section{Introduction}
+Mathematical expressions in LaTeX can be typeset using two writing modes: inline math mode and display math mode. Understanding the difference between these two is essential for proper formatting in scientific and technical writing.
+
+\section{Inline Math Mode}
+Inline math mode allows mathematical expressions to be written within a paragraph. 
+This is useful for short equations that do not require emphasis. 
+For example, the mass-energy equivalence is given by the equation $E=mc^2$, discovered in 1905 by Albert Einstein. 
+The formula appears as part of the text, making it convenient for simple expressions.
+
+\section{Display Math Mode}
+Display math mode is used when mathematical expressions need to be presented separately from the main text. 
+This is typically done for important equations, long formulas, or derivations. The equation is displayed on a separate line for clarity:
+
+\begin{equation}
+E=mc^2
+\label{eq:mass_energy}
+\end{equation}
+
+Numbering is helpful when referring to equations later in the text, such as "Equation \ref{eq:mass_energy} describes the fundamental relationship between mass and energy."
+
+\section{Natural Units and Simplifications}
+In physics, it is common to use natural units where the speed of light is set to 1 ($c=1$), simplifying the equation to:
+
+\begin{equation}
+E=m
+\label{eq:natural_units}
+\end{equation}
+
+As shown in Equation \ref{eq:natural_units}, using natural units simplifies calculations in theoretical physics and high-energy applications.
+
+\section{Conclusion}
+LaTeX provides powerful tools for typesetting mathematical expressions, allowing users to choose between inline and display modes based on readability and emphasis. Proper formatting ensures clarity and consistency in scientific documents.
+
+\end{document}
