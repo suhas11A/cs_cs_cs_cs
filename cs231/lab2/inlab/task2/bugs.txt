@@ -1,0 +1,14 @@
+BUGS
+
+(1) shiftReg1
+    -shiftReg should be of type reg and not of type wire
+    -begin and end are missing in the if else block
+(2) shiftReg2
+    -begin and end are missing in the if else block
+    -indexing is wrong (should be {shiftReg[2:0], din} instead of {din, shiftReg[3:1]})
+(3) shiftReg3
+    -assign is used only for wires not for regs
+    -even if assign was replaced with non blocking assignment operator, it should be in an always block for it to run on every clock cycle
+(4) shiftReg4
+    -even when we get rst we first write 0000 into register but then since it is a non blocking assignment we overwrite the zeros with previous values because the shift logic is not in an else block
+    -we cant have 2 non blocking assignments for same variable running parellely as it is in determinate

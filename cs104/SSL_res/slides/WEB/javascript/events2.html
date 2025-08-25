@@ -1,0 +1,69 @@
+<html>
+<head>
+  <title>Event Handling Example</title>
+</head>
+<body>
+  <h1>Event Handling in JavaScript</h1>
+  
+  <form id="sampleForm">
+    <p>Name:</p>
+    <input type="text" id="name" name="name"><br><br>
+
+    <p>Favorite Color:</p>
+    <select id="color" name="color">
+      <option value="">Select</option>
+      <option value="Red">Red</option>
+      <option value="Blue">Blue</option>
+      <option value="Green">Green</option>
+    </select><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="output"></div>
+  <div style="height: 1500px;">Scroll down to see the scroll event in action!</div>
+
+  <script>
+    const form = document.getElementById('sampleForm');
+    const nameInput = document.getElementById('name');
+    const colorSelect = document.getElementById('color');
+    const output = document.getElementById('output');
+
+    // Form Events
+    // 1. Submit event
+    form.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevents the form from reloading the page
+      const name = nameInput.value;
+      const color = colorSelect.value;
+      output.innerHTML += `<p>Form submitted! Name: ${name}, Favorite Color: ${color}</p>`;
+    });
+
+    // 2. Change event (on <select>)
+    colorSelect.addEventListener('change', () => {
+      const selectedColor = colorSelect.value;
+      output.innerHTML += `<p>Color changed to: ${selectedColor}</p>`;
+    });
+
+    // 3. Input event (on <input>)
+    nameInput.addEventListener('input', () => {
+      output.innerHTML += `<p>Typing: ${nameInput.value}</p>`;
+    });
+
+    // Document/Window Events
+    // 1. Load event
+    window.addEventListener('load', () => {
+      output.innerHTML += `<p>Page fully loaded!</p>`;
+    });
+
+    // 2. Resize event
+    window.addEventListener('resize', () => {
+      output.innerHTML += `<p>Window resized to: ${window.innerWidth} x ${window.innerHeight}</p>`;
+    });
+
+    // 3. Scroll event
+    window.addEventListener('scroll', () => {
+      output.innerHTML += `<p>Page scrolled to position: ${window.scrollY}px</p>`;
+    });
+  </script>
+</body>
+</html>

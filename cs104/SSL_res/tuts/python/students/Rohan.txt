@@ -1,0 +1,17 @@
+Student Name : Rohan Muletti
+Department : CSE
+Course, Credits, Grade
+Introduction to Computer Science, 6, 9
+Data Structures and Algorithms, 8, 8
+Computer Organization and Architecture, 6, 7
+Database Management Systems, 6, 10
+Operating Systems, 8, 8
+Software Engineering, 6, 9
+Web Programming, 4, 8
+Artificial Intelligence Fundamentals, 8, 9
+Network Security, 6, 9
+Mobile Application Development, 4, 8
+Computer Networks, 6, 7
+Computer Graphics, 4, 9
+Algorithms for Machine Learning, 8, 10
+Human-Computer Interaction, 6, 8

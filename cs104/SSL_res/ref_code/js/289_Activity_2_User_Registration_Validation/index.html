@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>Javascript Lab Q2</title>
+</head>
+<body>
+    <div id = "formm">
+    <h1>User Registration Form</h1>
+    
+    <!-- TODO : Create the form, labels and appropriate textboxes. -->
+    <form>
+        <label for="fullName">Full Name: </label>
+        <input type="text" id="fullName">
+        <br><br>
+        <label for="email">Email Address: </label>
+        <input type="email" id="email">
+        <br><br>
+        <label for="password">Password: </label>
+        <input type="password" id="password">
+        <br><br>
+        <label for="confirmPassword">Confirm Password: </label>
+        <input type="password" id="confirmPassword">
+        <br><br>
+        <button id = "submit" onclick="validateForm(event)"  type="button">Submit</button>
+        <br><br>
+    </form>
+    <!-- End of TODO. -->
+
+    <div id="feedback"></div>
+
+    <!-- TODO : Call/Import script.js file here -->
+    </div>
+    <script src="script.js"></script>
+    <!-- End of TODO. -->
+
+</body>
+</html>

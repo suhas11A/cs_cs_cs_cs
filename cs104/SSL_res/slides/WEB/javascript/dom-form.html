@@ -1,0 +1,47 @@
+<html>
+<head>
+  <title>DOM Manipulation Example</title>
+</head>
+<body>
+  <h1>Form Manipulation and DOM Updates</h1>
+
+  <form id="textForm">
+    <p>Enter Text:</>
+    <input type="text" id="userInput" placeholder="Type something...">
+    <button type="button" id="addTextButton">Add to Page</button>
+  </form>
+
+  <div id="output"></div>
+
+  <script>
+    const userInput = document.getElementById('userInput');
+    const addTextButton = document.getElementById('addTextButton');
+    const output = document.getElementById('output');
+
+    // 1. Convert input text to uppercase in real-time
+    userInput.addEventListener('input', () => {
+      userInput.value = userInput.value.toUpperCase();
+    });
+
+    // 2. Add new element with the input text to the DOM
+    addTextButton.addEventListener('click', () => {
+      const text = userInput.value;
+
+      // Check if input is not empty
+      if (text.trim() !== '') {
+        // Create a new paragraph element
+        const newParagraph = document.createElement('p');
+        newParagraph.textContent = `You added: ${text}`;
+
+        // Append the new paragraph to the output div
+        output.appendChild(newParagraph);
+
+        // Clear the input field after adding
+        userInput.value = '';
+      } else {
+        alert('Please enter some text!');
+      }
+    });
+  </script>
+</body>
+</html>

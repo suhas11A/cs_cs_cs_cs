@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>stylish me</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <header></header>
+  <label></label>
+  <body>
+    <h1 id="myhead">my webpage</h1>
+    <div id="navinavi"><nav></nav>
+      <p>
+        <a href="#section1" class="navi">home</a>
+        <a href="#section2" class="navi">about us</a>
+        <a href="#section3" class="navi">contact me</a>
+      </p>
+    </div>
+    <div id="borderme">
+      <h1 id="section1">welcome to my shitty website</h1>
+      <p>and no this is not a website if you are wondering</p>
+      <h1 id="section2">about us</h1>
+      <p>you can go yourself and you did not understand did you same here</p>
+      <h1 id="section3">contact me</h1>
+      <p>
+        email me :
+        <a href="mailto:suhasalladaboina@iitb.ac.in" id="mailme"
+          >suhasalladaboina@iitb.ac.in</a
+        >
+      </p>
+      <p>phone number : 93954319167</p>
+      <form>
+        <p>
+          name:
+          <input type="text" id="username" />
+          email:
+          <input type="text" id="username" />
+          msg:
+          <input type="text" id="username" />
+          <button>submit</button>
+        </p>
+      </form>
+    </div>
+    <footer id="fooot">suhas no copyrights reserved</footer>
+  </body>
+  <script>
+    window.onload = () => {
+      let foot = document.getElementById("fooot");
+      if (window.innerHeight < document.body.scrollHeight) {
+        //SCROLL BAR EXISTS HAI
+        foot.style = "color: red;";
+      } else {
+        //NO SCROLL BAR HERE!!
+        foot.style = "color: blue;position: fixed; bottom: 0";
+      }
+    };
+  </script>
+</html>

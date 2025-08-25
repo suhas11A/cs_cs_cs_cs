@@ -1,0 +1,26 @@
+SRC1   := $(wildcard src/src1/*.cpp)
+SRC2   := $(wildcard src/src2/*.cpp)
+
+OBJS_1   := $(patsubst src/src1/%.cpp,%.o,$(SRC1))
+OBJS_2   := $(patsubst src/src2/%.cpp,%.o,$(SRC2))
+
+OBJS := $(OBJS_1) $(OBJS_2)
+
+MAIN_SRCS := $(wildcard main/main*.cpp)
+
+MAINS  := $(patsubst main/main%.cpp,main%,$(MAIN_SRCS))
+
+all: $(OBJS) $(MAINS)
+
+$(OBJS_1) : %.o: src/src1/%.cpp
+	g++ -c $< -o $@
+
+$(OBJS_2) : %.o: src/src2/%.cpp
+	g++ -c $< -o $@
+
+main%: main/main%.cpp $(OBJS)
+	g++ $< $(OBJS) -o $@
+
+.PHONY : clean
+clean:
+	rm -f $(OBJS) $(MAINS)

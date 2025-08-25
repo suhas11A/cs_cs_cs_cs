@@ -1,0 +1,32 @@
+/*TODO: External CSS*/
+
+#formContainer{
+    background-color:lightpink;
+}
+.Rating{
+    width : 50px
+}
+/*End of TODO*/
+
+/*DO NOT MODIFY THE CONTENT BELOW*/
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.Box {
+    margin:0 auto;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+}

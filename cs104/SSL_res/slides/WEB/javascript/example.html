@@ -1,0 +1,79 @@
+<html>
+<head>
+  <title>JavaScript Example</title>
+  <style>
+    #message {
+      color: blue;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">Original Title</h1>
+  <button id="changeContentBtn">Change Content</button>
+  <button id="changeStyleBtn">Change Style</button>
+  <button id="hideElementBtn">Hide Element</button>
+  
+  <p id="message">This is a message.</p>
+  
+  <form id="exampleForm">
+    <p>Email: </p>
+    <input type="text" id="email" name="email">
+    <button type="submit">Submit</button>
+  </form>
+  <p id="errorMessage" class="hidden">Please enter a valid email address.</p>
+
+  <script>
+    // Change HTML Content
+    document.getElementById("changeContentBtn").addEventListener("click", () => {
+      document.getElementById("title").innerText = "Updated Title!";
+    });
+
+    // Change CSS Styling
+    document.getElementById("changeStyleBtn").addEventListener("click", () => {
+      const message = document.getElementById("message");
+      message.style.color = "green";
+      message.style.fontSize = "20px";
+    });
+
+    // Hide Element
+    document.getElementById("hideElementBtn").addEventListener("click", () => {
+      document.getElementById("message").classList.add("hidden");
+    });
+
+    // Validate Form
+    document.getElementById("exampleForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const emailInput = document.getElementById("email").value;
+      const errorMessage = document.getElementById("errorMessage");
+
+      if (!emailInput.includes("@")) {
+        errorMessage.classList.remove("hidden");
+      } else {
+        errorMessage.classList.add("hidden");
+        alert("Form submitted successfully!");
+      }
+    });
+  </script>
+
+<p>Click the light bulb to turn on/off the light.</p>
+
+<img id="myImage" onclick="changeImage()" src="bulboff.jpeg">
+
+
+<script>
+function changeImage() {
+  var image = document.getElementById('myImage');
+  if (image.src.match("bulbon")) {
+    image.src = "bulboff.jpeg";
+  } else {
+    image.src = "bulbon.jpeg";
+  }
+}
+</script>
+
+
+</body>
+</html>

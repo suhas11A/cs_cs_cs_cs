@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{multirow}  % Required for row merging
+
+\begin{document}
+
+\title{Typesetting Tables in \LaTeX}
+\date{\today}
+\maketitle
+
+\section{Difference Between tabular and table in LaTeX}
+
+In \LaTeX, the `tabular` environment is used to create structured tables, while the `table` environment is used to position tables with captions and labels for referencing. Below, we illustrate the difference using fruits and prices.
+
+\subsection{Using Only the tabular Environment}
+% This table appears exactly where written, with no caption or reference.
+\begin{center}
+    \begin{tabular}{|l|c|r|}
+        \hline
+        Fruit       & Quantity (kg) & Price (INR) \\
+        \hline
+        Mango       & 2  & 150  \\
+        Banana      & 1  & 50   \\
+        Guava       & 1.5  & 80  \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\subsection{Using the table Environment}
+% This table floats and includes a caption and label for referencing.
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \multirow{2}{*}{Fruit} & \multicolumn{2}{c|}{Quantity (kg)} & Price (INR) \\  
+        \cline{2-3} % Horizontal line across only the merged cells
+        & Bought & Sold & per kg \\  
+        \hline
+        Mango   & 5  & 3  & 80   \\
+        Banana  & 10 & 7  & 40   \\
+        Guava   & 8  & 5  & 60   \\
+        \hline
+    \end{tabular}
+    \caption{Fruit Market Data in India}
+    \label{tab:fruit}
+\end{table}
+
+Table~\ref{tab:fruit} presents an overview of fruit sales in a marketplace, using common units like kilograms (kg) and prices in **Indian Rupees (INR)**.
+
+\end{document}

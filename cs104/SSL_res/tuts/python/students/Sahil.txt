@@ -1,0 +1,8 @@
+Student Name : Sahil Kuber Sharma
+Department : CE
+Course, Credits, Grade
+Structural Analysis, 6, 8
+Geotechnical Engineering, 4, 9
+Transportation Engineering, 8, 7
+Environmental Engineering, 6, 10
+Construction Management, 4, 8

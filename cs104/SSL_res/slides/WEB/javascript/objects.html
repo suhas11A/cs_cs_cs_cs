@@ -1,0 +1,50 @@
+<html>
+<head>
+  <title>JavaScript Object Example</title>
+  <script>
+    // Define the object structure
+    var person = {
+      firstName: "",
+      lastName: "",
+      age: 0,
+      fullName: function() {
+        return this.firstName + " " + this.lastName; // Using "this" keyword
+      },
+      incrementAge: function() {
+        this.age++; // Incrementing age using "this"
+      }
+    };
+
+    // Define a function to work with the object
+    function objectExample() {
+      // Assign values to the object
+      person.firstName = "Alice";
+      person.lastName = "Smith";
+      person.age = 25;
+
+      // Access and display initial object properties
+      var output = "Initial Person Object:\n";
+      output += "Full Name: " + person.fullName() + "\n";
+      output += "Age: " + person.age + "\n\n";
+
+      // Modify a property directly
+      person.age = 26;
+      output += "After modifying age directly:\n";
+      output += "Age: " + person.age + "\n\n";
+
+      // Call the method to increment age
+      person.incrementAge();
+      output += "After calling incrementAge():\n";
+      output += "Age: " + person.age + "\n";
+
+      // Display the results
+      document.getElementById("message").innerText = output;
+    }
+  </script>
+</head>
+<body>
+  <h1>JavaScript Object Example</h1>
+  <button onclick="objectExample()">Click me to demonstrate object properties and methods</button>
+  <pre id="message"></pre>
+</body>
+</html>

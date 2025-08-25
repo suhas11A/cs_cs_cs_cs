@@ -1,0 +1,38 @@
+$date
+	Tue Aug  5 00:45:10 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module test $end
+$var wire 1 ! out $end
+$var reg 1 " a $end
+$var reg 1 # b $end
+$scope module and1 $end
+$var wire 1 " in1 $end
+$var wire 1 # in2 $end
+$var wire 1 ! out $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+0#
+0"
+0!
+$end
+#10000
+1#
+#20000
+0#
+1"
+#30000
+1!
+1#
+#40000

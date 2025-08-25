@@ -1,0 +1,4 @@
+find . -name "*.zip" | while read file: do unzip "$file" -d "${file%.*}";done
+HTML snippets
+Go to File > Preferences > Setting , search bar type html.autoClosingTags
+profile import there

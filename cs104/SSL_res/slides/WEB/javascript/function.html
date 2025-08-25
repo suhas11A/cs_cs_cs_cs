@@ -1,0 +1,19 @@
+<html>
+<head>
+  <title>JavaScript Function with Arguments</title>
+  <script>
+    // Define the function that takes arguments
+    function greet(name, age) {
+      var greeting = "Hello, " + name + "! You are " + age + " years old.";
+      document.getElementById("message").innerText = greeting;
+    }
+  </script>
+</head>
+<body>
+  <h1>JavaScript Function with Arguments</h1>
+  <button onclick="greet('Ravi', 17)">Click me to greet Ravi</button>
+  <button onclick="greet('Rashmi', 18)">Click me to greet Rashmi</button>
+  <p id="message"></p>
+</body>
+</html>
+

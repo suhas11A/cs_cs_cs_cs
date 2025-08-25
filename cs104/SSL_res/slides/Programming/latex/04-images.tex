@@ -1,0 +1,25 @@
+\documentclass{article}
+\usepackage{graphicx} % Package to handle images
+
+% Set the path where images are stored
+\graphicspath{{images/}} 
+
+\begin{document}
+
+\title{Using Images in \LaTeX}
+\date{\today}
+
+\maketitle
+
+% Begin figure environment
+\begin{figure}[h]
+    \centering % Centers the image
+    \includegraphics[width=0.75\textwidth]{calvin} % Insert image with 75% text width
+    \caption{A nice cartoon} % Caption for the image
+    \label{fig:calvin} % Label for referencing the figure
+\end{figure}
+
+% Referencing the figure in text
+As you can see in Figure \ref{fig:calvin}, Calvin is having fun with Hobbes. This cartoon is found on page \pageref{fig:calvin}.
+
+\end{document}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+  <title>Counting Stairs</title>
+</head>
+<body>
+    <h1>Let's Help Erin!</h1>
+    <p>How many ways are there for Stanley to get up the stairs?</p>
+    <label for="inputN">Number of stairs: </label>
+    <input type="number" id="inputN" min="1" step="1" value="1">
+    <button onclick="omw()">Calculate</button>
+    <p id="result"></p>
+
+    <script>
+      function omw() {
+        let n=parseInt(document.getElementById("inputN").value);
+        let ans=stairs(n+1);
+        document.getElementById("result").innerHTML=ans;
+      }
+      function stairs(n) {
+        if (n==0) return 0;
+        if (n==1) return 1;
+        return parseInt(stairs(n-1)) + parseInt((n-2));
+        console.log(9);
+      }
+    </script>
+</body>
+</html>
