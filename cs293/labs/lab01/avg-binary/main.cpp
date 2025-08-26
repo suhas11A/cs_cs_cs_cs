@@ -1,5 +1,6 @@
 #include<iostream>
 #include<fstream>
+#include <iomanip>
 #include "common.h"
 #include "avg-binary.h"
 
