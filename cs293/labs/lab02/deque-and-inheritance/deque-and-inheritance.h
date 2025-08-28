@@ -1,265 +1,234 @@
-#include <iostream>
-#include <utility>
-#include <stdexcept>
 using namespace std;
 
 template <typename T>
-class Deque
-{
-    friend ostream& operator<<(ostream& out, const Deque& dq)
-    {
-        for (int i = 0; i < dq.size; ++i)
-        {
-            int idx = (dq.front_idx + i) % dq.capacity;
-            out << dq.arr[idx];
-            if (i + 1 < dq.size) out << " ";
+class Deque {
+
+    friend ostream& operator<<(ostream& out, const Deque& dq) { 
+        T* arr = dq.arr;
+        if (dq.size == 0) {
+            return out;
+        }
+        for(int i=dq.index_front; i<dq.index_front+dq.size; i++) {
+            out << arr[i%dq.capacity] << " ";
         }
         return out;
     }
 
 protected:
-    T*   arr          = nullptr;
-    int  capacity     = 0;
-    int  resize_factor= 2;
-    int  size         = 0;
-    bool auto_resize  = true;
-    int  front_idx    = 0;
-
-    void grow_if_needed()
-    {
-        if (size < capacity) return;
-        if (!auto_resize) return;
-
-        int new_cap = capacity > 0 ? capacity * resize_factor : 1;
-        if (new_cap <= capacity) new_cap = capacity + 1;
-
-        T* new_arr = new T[new_cap];
-        for (int i = 0; i < size; ++i)
-            new_arr[i] = arr[(front_idx + i) % capacity];
-
-        delete[] arr;
-        arr = new_arr;
-        capacity = new_cap;
-        front_idx = 0;
-    }
+    T* arr = NULL;
+    int capacity = 5;
+    int resize_factor = 2;
+    int size = 0;
+    int index_front = 0;
+    int index_back = -1;
+    bool auto_resize = true;
 
 public:
-    // ctors
-    Deque(int cap, bool resize = true, int resize_factor = 2)
-    {
-        capacity = (cap <= 0 ? 1 : cap);
+    Deque(int cap, bool resize = true, int resize_factor = 2) 
+    {                                           
         auto_resize = resize;
-        this->resize_factor = (resize_factor <= 0 ? 2 : resize_factor);
+        capacity = cap;
+        this->resize_factor = resize_factor;
         arr = new T[capacity];
-        size = 0;
-        front_idx = 0;
     }
 
     Deque(bool resize = true, int resize_factor = 2)
     {
-        capacity = 2;
-        auto_resize = resize;
-        this->resize_factor = (resize_factor <= 0 ? 2 : resize_factor);
         arr = new T[capacity];
-        size = 0;
-        front_idx = 0;
+        auto_resize = resize;
+        this->resize_factor = resize_factor;
     }
 
     Deque(const Deque& dq)
     {
         capacity = dq.capacity;
-        auto_resize = dq.auto_resize;
         resize_factor = dq.resize_factor;
         size = dq.size;
+        index_front = dq.index_front;
+        index_back = dq.index_back;
+        auto_resize = dq.auto_resize;
         arr = new T[capacity];
-        for (int i = 0; i < size; ++i)
-            arr[i] = dq.arr[(dq.front_idx + i) % dq.capacity];
-        front_idx = 0;
-    }
-
-    // NEW: copy assignment (deep copy)
-    Deque& operator=(const Deque& dq)
-    {
-        if (this == &dq) return *this;
-        T* new_arr = new T[dq.capacity];
-        for (int i = 0; i < dq.size; ++i)
-            new_arr[i] = dq.arr[(dq.front_idx + i) % dq.capacity];
-        delete[] arr;
-        arr = new_arr;
-        capacity = dq.capacity;
-        size = dq.size;
-        front_idx = 0; // packed
-        auto_resize = dq.auto_resize;
-        resize_factor = dq.resize_factor;
-        return *this;
-    }
-
-    // OPTIONAL but nice: move ctor/assignment for efficiency
-    Deque(Deque&& dq) noexcept
-        : arr(dq.arr), capacity(dq.capacity), resize_factor(dq.resize_factor),
-          size(dq.size), auto_resize(dq.auto_resize), front_idx(dq.front_idx)
-    {
-        dq.arr = nullptr; dq.capacity = 0; dq.size = 0; dq.front_idx = 0;
-    }
-
-    Deque& operator=(Deque&& dq) noexcept
-    {
-        if (this == &dq) return *this;
-        delete[] arr;
-        arr = dq.arr;
-        capacity = dq.capacity;
-        resize_factor = dq.resize_factor;
-        size = dq.size;
-        auto_resize = dq.auto_resize;
-        front_idx = dq.front_idx;
-        dq.arr = nullptr; dq.capacity = 0; dq.size = 0; dq.front_idx = 0;
-        return *this;
+        for(int i=index_front; i<index_front+size; i++)
+        {
+            arr[i%capacity] = dq.arr[i%capacity];
+        }
     }
 
     ~Deque()
     {
         delete[] arr;
-        arr = nullptr;
-        capacity = 0;
-        size = 0;
-        front_idx = 0;
     }
 
-    // ---- const-correct helpers ----
-    void print() const
+    void print()
     {
-        cout << *this << "\n";
+        for(int i=index_front; i<index_front+size; i++)
+        {
+            cout << arr[i%capacity] << " ";
+        }
+        cout << endl;
     }
 
-    bool is_empty() const { return size == 0; }
-    int  get_capacity() const { return capacity; }
-    int  get_size() const { return size; }
+    bool is_empty()
+    {
+        if(size == 0)
+            return true;
+        else return false;
+    } 
 
+    int get_capacity()
+    {
+        return capacity;
+    }
+
+    int get_size()
+    {
+        return size;
+    }
 protected:
-    bool push_back(T data)
-    {
-        if (size == capacity)
-        {
-            if (!auto_resize) return false;
-            grow_if_needed();
+//Returns true if push succeds else returns false
+    bool push_back(T data){
+        if (size >= capacity){
+            if(auto_resize == false) return 0;
+            else {   
+                capacity = resize_factor*capacity;
+                T* arr2 = arr;
+                arr = new(nothrow) T[capacity];
+                if(!arr) 
+                    return 0;
+                for(int i=index_front; i<index_front+size; i++)
+                {
+                    arr[i-index_front] = arr2[i%capacity];
+                }
+                index_back=size;
+                index_front=0;
+                arr[size] = data;
+                size++;
+                delete[] arr2;
+                arr2 = NULL;
+            }
         }
-        int idx = (front_idx + size) % capacity;
-        arr[idx] = data;
-        ++size;
-        return true;
+        else{
+            index_back = (index_back+1)%capacity;
+            arr[index_back] = data;
+            size++;
+        }
+        return 1;
     }
 
-    T pop_front()
-    {
-        if (size == 0) throw "Deque underflow";
-        T val = arr[front_idx];
-        front_idx = (front_idx + 1) % capacity;
-        --size;
-        return val;
+//Throw exception if the queue is empty
+    T pop_front(){
+        if(is_empty())
+            throw std::underflow_error("Deque is empty");
+        T num_pop = arr[index_front];
+        index_front = (index_front+1)%capacity;
+        size--;
+        return num_pop;
     }
 
-    bool push_front(T data)
-    {
-        if (size == capacity)
-        {
-            if (!auto_resize) return false;
-            grow_if_needed();
+//Returns true if push succeds else returns false
+    bool push_front(T data){
+        if (size >= capacity){
+            if(auto_resize == false) return 0;
+            else {   
+                capacity = resize_factor*capacity;
+                T* arr2 = arr;
+                arr = new(nothrow) T[capacity];
+                if(!arr) 
+                    return 0;
+                for(int i=index_front; i<index_front+size; i++)
+                {
+                    arr[i-index_front+1] = arr2[i%capacity];
+                }
+                index_back=size;
+                index_front=0;
+                arr[0] = data;
+                size++;
+                delete[] arr2;
+                arr2 = NULL;
+            }
         }
-        front_idx = (front_idx - 1 + capacity) % capacity;
-        arr[front_idx] = data;
-        ++size;
-        return true;
+        else {
+            index_front = (index_front-1+capacity)%capacity;
+            arr[index_front] = data;
+            size++;
+        }
+        return 1;
     }
 
     T pop_back()
     {
-        if (size == 0) throw "Deque underflow";
-        int idx = (front_idx + size - 1) % capacity;
-        T val = arr[idx];
-        --size;
-        return val;
+        if(is_empty())
+            throw std::underflow_error("Deque is empty");
+        T num_pop = arr[index_back];
+        index_back = (index_back-1+capacity)%capacity;
+        size--;
+        return num_pop;
     }
 
-    // make these const
-    T peek_front() const
-    {
-        if (size == 0) throw "Deque is empty";
-        return arr[front_idx];
+//Throw exception if the queue is empty
+    T peek_front() {
+        if(is_empty()) throw std::underflow_error("Deque is empty");
+        return arr[index_front];
     }
 
-    T peek_back() const
-    {
-        if (size == 0) throw "Deque is empty";
-        int idx = (front_idx + size - 1) % capacity;
-        return arr[idx];
+//Throw exception if the queue is empty
+    T peek_back() {
+        if(is_empty()) {
+            throw std::underflow_error("Deque is empty");
+        }
+        return arr[index_back];
     }
 };
 
+//Public inheritance: public->public, protected->protected
+//Protected inheritance: public->protected, protected->protected
+//Private inheritance (default): public->private, protected->private
 
-// -------------------- Queue --------------------
+//To access private members of the base class, need to declare derived class as a friend class
 
 template<typename T>
 class Queue : public Deque<T>
 {
-    friend ostream& operator<<(ostream& out, const Queue& q)
-    {
-        const Deque<T>& base = static_cast<const Deque<T>&>(q);
-        out << base;
-        return out;
-    }
-
 public:
-    using Deque<T>::Deque; // inherit ctors
+    Queue(int cap, bool resize = true, int resize_factor = 2) 
+        : Deque<T>(cap, resize, resize_factor) 
+    {}
 
-    Queue(const Queue& other) : Deque<T>(other) {}
-    Queue& operator=(const Queue& other) { Deque<T>::operator=(other); return *this; }
-    Queue(Queue&& other) noexcept : Deque<T>(std::move(other)) {}
-    Queue& operator=(Queue&& other) noexcept { Deque<T>::operator=(std::move(other)); return *this; }
+    Queue(bool resize = true, int resize_factor = 2)
+        : Deque<T>(resize, resize_factor) 
+    {}
+
+    Queue(const Queue& q)
+        : Deque<T>(q)
+    {}
+
+    // To create a function called 'push' in Queue, make a wrapper
+    bool push(T data) {
+        return this->push_back(data);
+    }
 
     using Deque<T>::push_back;
     using Deque<T>::pop_front;
     using Deque<T>::peek_front;
-    using Deque<T>::print;
-    using Deque<T>::is_empty;
-    using Deque<T>::get_size;
-    using Deque<T>::get_capacity;
-
-    bool push(T data) { return this->push_back(data); }
-    T pop()           { return this->pop_front();     }
-    T peek()    const { return this->peek_front();    }
 };
-
-
-// -------------------- Stack --------------------
 
 template<typename T>
 class Stack : public Deque<T>
 {
-    friend ostream& operator<<(ostream& out, const Stack& s)
-    {
-        // print bottom -> top, same as Deque front -> back
-        const Deque<T>& base = static_cast<const Deque<T>&>(s);
-        out << base;
-        return out;
-    }
-
 public:
-    using Deque<T>::Deque; // inherit ctors
+    Stack(int cap, bool resize = true, int resize_factor = 2) 
+        : Deque<T>(cap, resize, resize_factor) 
+    {}
 
-    Stack(const Stack& other) : Deque<T>(other) {}
-    Stack& operator=(const Stack& other) { Deque<T>::operator=(other); return *this; }
-    Stack(Stack&& other) noexcept : Deque<T>(std::move(other)) {}
-    Stack& operator=(Stack&& other) noexcept { Deque<T>::operator=(std::move(other)); return *this; }
+    Stack(bool resize = true, int resize_factor = 2)
+        : Deque<T>(resize, resize_factor) 
+    {}
+
+    Stack(const Stack& q)
+        : Deque<T>(q)
+    {}
 
     using Deque<T>::push_back;
     using Deque<T>::pop_back;
     using Deque<T>::peek_back;
-    using Deque<T>::print;
-    using Deque<T>::is_empty;
-    using Deque<T>::get_size;
-    using Deque<T>::get_capacity;
-
-    bool push(T data) { return this->push_back(data); }
-    T pop()           { return this->pop_back();      }
-    T peek()    const { return this->peek_back();     }
 };
