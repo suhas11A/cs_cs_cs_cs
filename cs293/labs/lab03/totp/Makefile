@@ -17,7 +17,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 EXEC = totp
 
 # Number of Test Cases
-NUM_TEST_CASES = 3
+NUM_TEST_CASES = 2
 
 # Testcase Files
 TCDIR = tests

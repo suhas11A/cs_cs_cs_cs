@@ -1,112 +1,80 @@
 #include "dictionary.h"
 
+//Implement dictionary here
 
-Dictionary::Dictionary()
-{
+Dictionary::Dictionary(){
     N = DICT_SIZE;
     A = new Entry[N];
-}
+    for (int i = 0; i < N; i++) {
+        A[i].marker = '\0';
+    }
+};
 
-Dictionary::~Dictionary()
-{
+Dictionary::~Dictionary(){
     delete[] A;
 }
 
-#define factor 31
-#define alpha 0.6180339887
-#define TOMBSTONE (char *)0xabcdabcdabcdabcd
-
-int Dictionary::hashValue(char key[])
-{
-    // function should return fibonacci compression applied to the polynomial hash value
-    // to prevent overflow in polynomial rolling hash, we will only store its fractional part
-
-    // observe that {p * {alpha * x} + alpha * y} = {alpha * (p * x + y)} where x, y, p are integers and alpha is a float
-    // Hence we have
-    // {alpha * (a0 + a1 p^1 + a2 p^2 + ... + an p^n)} = {alpha * a0 + p * {alpha * (a1 + a2 p^1 + ... + an p^n-1)}}
-    // which we can compute iteratively
-
-    double fracHashValue = 0;
-    for (int i = strlen(key) - 1; i >= 0; i--)
-    {
-        fracHashValue *= factor;
-        fracHashValue += alpha * key[i];
-        fracHashValue -= int(fracHashValue);
+int Dictionary::hashValue(char key[]){
+    int hashValue = 0;
+    int i=0;
+    int p = 31;
+    double alpha = 0.6180339887;
+    int currp = 1;
+    while(key[i] != '\0') {
+        hashValue += key[i]*currp;
+        currp *= p;
+        i++;
     }
-    return int(N * fracHashValue);
+    int ans = int(N*(hashValue*alpha))%N;
+    return int(ans);
 }
 
-int Dictionary::findFreeIndex(char key[])
-{
-    int hash = hashValue(key);
-    for (int i = 0; i < N; i++)
-    {
-        int index = (hash + i) % N;
-        if (A[index].key == nullptr || A[index].key == TOMBSTONE ||
-            (A[index].key != TOMBSTONE && strcmp(A[index].key, key) == 0))
-        {
-            return index;
+int Dictionary::findFreeIndex(char key[]){
+    int i=hashValue(key); int j=i;
+    do {
+        if (A[i].marker=='p') {
+            if (strcmp(A[i].key, key)==0) return i;
         }
-    }
+        i=(i+1)%N;
+    } while (i!=j);
+    do {
+        if (A[i].marker!='p') return i;
+        i=(i+1)%N;
+    } while (i!=j);
     return -1;
 }
 
-struct Entry *Dictionary::get(char key[])
-{
-    // find key
-    int hash = hashValue(key);
-    for (int i = 0; i < N; i++)
-    {
-        int index = (hash + i) % N;
-        if (A[index].key == nullptr)
-        {
-            return nullptr; // stop at empty slot
-        }
-        if (A[index].key != TOMBSTONE && strcmp(A[index].key, key) == 0)
-        {
-            return &A[index];
-        }
-    }
-    return nullptr;
+struct Entry* Dictionary::get(char key[]){
+    int i=hashValue(key); int j=i;
+    if (A[i].marker=='\0') return NULL;
+    do {
+        if (A[i].marker=='p' && strcmp(A[i].key, key)==0) return A+i;
+        i = (i+1)%N;
+    } while (i!=j && A[i].marker!='\0');
+    return NULL;
 }
 
-bool Dictionary::put(Entry e)
-{
-    int idx = findFreeIndex(e.key);
-    if (idx == -1)
-        return false;
-
-    // If overwriting, delete old key
-    if (A[idx].key != nullptr && A[idx].key != TOMBSTONE)
-    {
-        delete[] A[idx].key;
-    }
-
-    // Deep copy key
-    int len = strlen(e.key);
-    A[idx].key = new char[len + 1];
-    strcpy(A[idx].key, e.key);
-    A[idx].value = e.value;
-
+bool Dictionary::put(Entry e) {
+    int i=findFreeIndex(e.key);
+    if (i==-1) return false;
+    delete[] A[i].key;
+    A[i].key = new char[strlen(e.key)];
+    strcpy(A[i].key,e.key);
+    A[i].value = e.value;
+    A[i].marker = 'p';
     return true;
 }
 
-bool Dictionary::remove(char key[])
-{
-    int hash = hashValue(key);
-    for (int i = 0; i < N; i++)
-    {
-        int index = (hash + i) % N;
-        if (A[index].key == nullptr)
-        {
-            return false; // not found
-        }
-        if (A[index].key != TOMBSTONE && strcmp(A[index].key, key) == 0)
-        {
-            delete[] A[index].key;
-            A[index].key = TOMBSTONE;
+bool Dictionary::remove(char key[]){
+    int i=hashValue(key); int j=i;
+    if (A[i].marker=='\0') return false;
+    do {
+        if (A[i].marker=='p' && strcmp(A[i].key, key)==0) {            
+            A[i].value = 0;
+            A[i].marker = 'b';
             return true;
         }
-    }
+        i = (i+1)%N;
+    } while (i!=j && A[i].marker!='\0');
     return false;
 }

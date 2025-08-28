@@ -10,6 +10,7 @@ struct Entry {
   // define suitable fields here
   char* key;
   int value;
+  char marker;
 };
 
 class Dictionary {
