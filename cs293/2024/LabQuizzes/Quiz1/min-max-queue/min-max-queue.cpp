@@ -42,34 +42,83 @@ return INT_MIN for getMax() and return -1 for front().
 */
 
 
+#include <vector>
+#include <algorithm>
+#include <climits>
+#include <stdexcept>
+
 class MinMaxQueue {
 private:
-  // Add your fields here!!
+  struct Node {
+    int val;
+    int mn;
+    int mx;
+  };
+
+  std::vector<Node> in_;   // push here
+  std::vector<Node> out_;  // pop/front from here
+
+  void push_with_mm(std::vector<Node>& st, int x) {
+    if (st.empty()) st.push_back({x, x, x});
+    else {
+      int mn = std::min(x, st.back().mn);
+      int mx = std::max(x, st.back().mx);
+      st.push_back({x, mn, mx});
+    }
+  }
+
+  void move_in_to_out() {
+    // Move all items from in_ to out_, rebuilding min/max for out_
+    while (!in_.empty()) {
+      int v = in_.back().val;
+      in_.pop_back();
+      if (out_.empty()) out_.push_back({v, v, v});
+      else {
+        int mn = std::min(v, out_.back().mn);
+        int mx = std::max(v, out_.back().mx);
+        out_.push_back({v, mn, mx});
+      }
+    }
+  }
 
 public:
   MinMaxQueue() {}
 
   void push(int n) {
-    
+    push_with_mm(in_, n);
   }
 
   void pop() {
-    
+    if (out_.empty()) {
+      if (in_.empty()) throw std::out_of_range("pop from empty queue");
+      move_in_to_out();
+    }
+    out_.pop_back();
   }
 
   int front() {
-    return -1; // dummy
+    if (out_.empty()) {
+      if (in_.empty()) throw std::out_of_range("front from empty queue");
+      move_in_to_out();
+    }
+    return out_.back().val;
   }
 
   int getMin() {
-    return INT_MAX; // dummy
+    if (in_.empty() && out_.empty()) throw std::out_of_range("min from empty queue");
+    if (in_.empty()) return out_.back().mn;
+    if (out_.empty()) return in_.back().mn;
+    return std::min(in_.back().mn, out_.back().mn);
   }
 
   int getMax() {
-    return INT_MIN; // dummy
+    if (in_.empty() && out_.empty()) throw std::out_of_range("max from empty queue");
+    if (in_.empty()) return out_.back().mx;
+    if (out_.empty()) return in_.back().mx;
+    return std::max(in_.back().mx, out_.back().mx);
   }
 
   bool empty() {
-    return false; // dummy
+    return in_.empty() && out_.empty();
   }
 };

@@ -22,7 +22,9 @@ _start:
     ; mov [r1], r2 => *r1 = r2 (store r2 in memory pointed by r1)
     ; mov num, r1 => Illegal
     ; mov [num], r1 => *num = r1 (store r1 in memory pointed by num) -> Never do this please
-    mov rax, 2220934 ; Remove this line :-)
+    mov rax, [num1]
+    mov rbx, [num2]
+    add rax, rbx
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; END OF YOUR CODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; Don't worry too much about the below code, it's just converting the number to a string
     ; Convert rax (result) to string

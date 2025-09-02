@@ -1,0 +1,4 @@
+rax changed from 1 to 6
+rcx changed from 0 to 4,198,427
+r11 changed from 0 to 770
+rip changed from 0x401019 <_start+25> to 0x40101b <_start+27>

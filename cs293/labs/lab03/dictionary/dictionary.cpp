@@ -30,17 +30,23 @@ int Dictionary::hashValue(char key[]){
 }
 
 int Dictionary::findFreeIndex(char key[]){
-    int i=hashValue(key); int j=i;
+    int i = hashValue(key);
+    int j = i;
+    int first_tomb = -1;
     do {
-        if (A[i].marker=='p') {
-            if (strcmp(A[i].key, key)==0) return i;
+        if (A[i].marker == '\0') {
+            return (first_tomb != -1) ? first_tomb : i;
         }
-        i=(i+1)%N;
-    } while (i!=j);
-    do {
-        if (A[i].marker!='p') return i;
-        i=(i+1)%N;
-    } while (i!=j);
+        if (A[i].marker == 'p') {
+            if (strcmp(A[i].key, key) == 0) {
+                return i;
+            }
+        } else {
+            if (first_tomb == -1) first_tomb = i;
+        }
+        i = (i + 1) % N;
+    } while (i != j);
+    if (first_tomb != -1) return first_tomb;
     return -1;
 }
 

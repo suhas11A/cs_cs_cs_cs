@@ -1,2 +1,0 @@
-check output through the command 
-oathtool --totp --digits=6 -b "GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ"
