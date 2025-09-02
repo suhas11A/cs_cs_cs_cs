@@ -1,0 +1,15 @@
+Min: 8
+Max: 8
+Min: 8
+Max: 10
+Min: 8
+Max: 10
+Min: 9
+Max: 10
+Empty: No
+Front: 10
+Min: 7
+Max: 10
+Min: 7
+Max: 9
+Front: 9

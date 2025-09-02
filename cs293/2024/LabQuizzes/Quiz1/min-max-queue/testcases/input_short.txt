@@ -1,0 +1,22 @@
+push 8
+getMin
+getMax
+push 10
+getMin
+getMax
+push 9
+getMin
+getMax
+pop
+getMin
+getMax
+empty
+front
+push 7
+getMin
+getMax
+push 8
+pop
+getMin
+getMax
+front

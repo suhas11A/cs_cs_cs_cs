@@ -1,2 +1,0 @@
-Transmitted Codeword: 1011001110
-Received message is error-free.

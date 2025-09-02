@@ -69,11 +69,16 @@ public:
         ((to_del->parent->left==to_del)? to_del->parent->left : to_del->parent->right) = child;
         delete to_del; return;
     }
-    void inorder(node* nodie){
+    void inorder(node* nodie) {
+        inorder_help(nodie);
+        cout << '\n';
+    }
+
+    void inorder_help(node* nodie){
         if (is_null(nodie)) return;
-        inorder(nodie->left);
+        inorder_help(nodie->left);
         cout << nodie->value << " ";
-        inorder(nodie->right);
+        inorder_help(nodie->right);
     }
 };
 
