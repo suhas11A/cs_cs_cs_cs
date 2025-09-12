@@ -1,0 +1,7 @@
+p,IT,68,Midlevel,2371
+cqlwc,HR,111,Junior,4259 mcrwu,Marketing,8,Senior,2075
+cyn,Engineering,28,Junior,2552 lqby,IT,47,God,4359 nvruz,IT,153,Director,3132 byrk,Marketing,90,Junior,3617
+null rkkbf,Finance,87,Executive,2367 ags,HR,161,Senior,1052 pyu,IT,60,Executive,2981 vin,IT,108,Junior,1444 null e,Marketing,50,Junior,2050 hmr,Sales,186,Junior,3616
+ipby,Engineering,88,Executive,4282 ez,HR,75,Director,3348 null null null null null rmc,IT,117,Director,3347 mcakx,Marketing,27,Junior,1379 null gtuq,Sales,81,Junior,2631
+null null null null null null null null er,Marketing,97,Director,1180
+null fa,Marketing,199,Junior,4598

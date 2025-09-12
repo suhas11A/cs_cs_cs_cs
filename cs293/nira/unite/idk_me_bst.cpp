@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <random>
+#include <numeric>
+#include <cassert>
 using namespace std;
 
 class node{
@@ -30,7 +35,7 @@ public:
         auto temp = root; node* x = nullptr;
         while(!is_null(temp)) {
             x = temp;
-            temp =  (n>= temp->value)? temp->right : temp->left;
+            temp = (n>= temp->value)? temp->right : temp->left;
         }
         if (!x) {root = new node(n); return;}
         node* tempo = new node(n);
@@ -82,12 +87,18 @@ public:
     }
 };
 
-
 int main() {
+    int n;
+    if (!(std::cin >> n)) return 0;
+    std::vector<int> vals(n);
+    std::iota(vals.begin(), vals.end(), 1);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::shuffle(vals.begin(), vals.end(), gen);
+
     binary_search_tree s;
-    s.insert(7);
-    s.delete_node(7);
-    s.insert(6);
-    s.search(6);
-    s.inorder(s.root);
+    for (int x : vals) s.insert(x);
+
+    // s.inorder(s.root);
+    return 0;
 }

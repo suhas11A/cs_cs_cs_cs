@@ -1,0 +1,14 @@
+Introduction
+------------
+
+In this lab, you will learn to deal with trees.
+
+1. The first problem is an easier problem but involves a tree that can have arbitrary nodes.
+Read:  is-valid-bst/README.md
+
+2. The second problem is about inserting in red-black tree.
+Read: rb/README.md      
+
+3. [Bonus] The third problem is abount two-three-four-tree which are isomorphic to the red-black trees.
+Read: two-three-four-trees/Readme.md
+

@@ -1,0 +1,4 @@
+a,HR,25,God,2000
+b,HR,10,Executive,1500 c,IT,40,Senior,1300
+d,Finance,32,Junior,1000 null e,HR,45,Senior,1400 f,IT,49,Midlevel,1200
+g,Finance,26,Junior,1000 null null null null h,Sales,23,Senior,1500
