@@ -1,0 +1,6 @@
+a,HR,10,God,10
+b,HR,9,Boss,9 null
+c,HR,8,Executive,8 null
+d,HR,7,Senior,7 null
+e,Finance,6,Midlevel,6 null
+f,Finance,5,Junior,5 null

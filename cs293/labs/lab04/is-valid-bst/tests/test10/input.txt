@@ -1,0 +1,8 @@
+jdos,Management,181,Senior,1993
+lht,Management,9,Director,3064 ki,Marketing,12,Executive,1329
+sikbf,HR,6,Director,3704 kqduf,Management,151,Director,2770 null ezppx,Marketing,199,Junior,2052
+x,Finance,117,God,1084 qrekq,HR,140,God,2511 fm,Management,16,Director,2537
+lvnk,Engineering,56,Director,2405 pkmhq,Finance,157,God,1024 qtk,HR,98,Junior,3400 qg,Management,5,Midlevel,2098
+null yjwsa,Engineering,187,Director,1932 null null nzy,HR,41,Executive,2330 xepr,HR,121,Executive,1579 tpkws,HR,177,Junior,2477
+ioss,Engineering,64,God,2865 null null ifrml,HR,76,Junior,4720 null null null oxx,IT,183,God,2847
+null hctkc,Engineering,142,Executive,1546 sk,HR,70,Executive,1996

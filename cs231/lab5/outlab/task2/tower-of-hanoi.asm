@@ -65,9 +65,9 @@ printNum:
 
 printFromAndTo:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Start of your code ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Write code to print " from " *rsi " to " *rdi
+; Write code to print " from " *rax " to " *rdi
+    mov rsi, rax
     push rax
-    push rdx
     push rcx
 
     push rdi
@@ -99,14 +99,7 @@ printFromAndTo:
     mov  rax, 1
     syscall
 
-    mov rdi, 1
-    mov rsi, newline
-    mov rdx, 1
-    mov rax, 1
-    syscall
-
     pop rcx
-    pop rdx
     pop rax
 
     ret
@@ -126,10 +119,15 @@ hanoi:
 ;;;; }
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;  End of your code  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    mov r10, [rsp+8]
-    mov rbx, [rsp+16]
-    mov r12, [rsp+24]
-    mov rax, [rsp+32] 
+    push rbp
+    mov  rbp, rsp
+    push rbx
+    push r12
+
+    mov r10, [rbp+16]
+    mov rbx, [rbp+24]
+    mov r12, [rbp+32]
+    mov rax, [rbp+40] 
 
     mov r8, 1
     cmp rax, r8
@@ -148,11 +146,23 @@ hanoi:
 
     mov rsi, r10
     mov rdi, rbx
+
+    push rax
+    mov rax, rsi
     call printFromAndTo
+    pop rax
+
+    push rax
+    mov rdi, 1
+    mov rsi, newline
+    mov rdx, 1
+    mov rax, 1
+    syscall
+    pop rax
 
     pop rax
 
-    ret
+    jmp .retoo
 
 .goboi:
     sub rax, r8
@@ -181,11 +191,25 @@ hanoi:
 
     pop rax
 
+    sub  rsp, 8
     call printNum
+    add  rsp, 8
 
     mov rsi, r10
     mov rdi, rbx
+    
+    push rax
+    mov rax, rsi
     call printFromAndTo
+    pop rax
+
+    push rax
+    mov rdi, 1
+    mov rsi, newline
+    mov rdx, 1
+    mov rax, 1
+    syscall
+    pop rax
 
     sub rax, r8
 
@@ -201,6 +225,10 @@ hanoi:
     pop r10
     pop rax
 
+.retoo:
+    pop  r12
+    pop  rbx
+    pop  rbp
     ret
 
 _start:
