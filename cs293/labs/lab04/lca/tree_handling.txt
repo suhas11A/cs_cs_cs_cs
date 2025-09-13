@@ -1,0 +1,82 @@
+# Using Interactive Mode to input Trees in lab problems
+
+You might have noticed that all problems involving trees have an interactive testing mode for you to input your own testcases.
+This mode can be invoked using the command `make interactive` on the terminal.
+Use this text document as a usage guide to the interactive mode. This mode allows you parse trees in a more visually appealing manner which helps a lot in debugging code.
+
+************************ Step 1: Preparing an input file ************************
+
+The tree must be saved as a text file in the problem directory (here `LCA/`) in a format similar to the provided input files (eg. tests/test1/input.txt excluding last line).
+
+More details about this formatting is presented at the end.
+
+After preparing this text file, compile and run the code using `make interactive`.
+
+
+************************ Step 2: Loading the file *******************************
+
+After the program starts up in the interactive mode you will see an input field marked by `>>>`.
+
+Type `LOAD {filename}` where `filename` is the name of your file in the problem directory containing the tree.
+
+After pressing ENTER, the tree will be successfully loaded if a message like `{n} nodes loaded` appears on-screen.
+
+
+************************ Step 3: Running Queries ********************************
+
+Read the file `main.cpp` to understand the auxillary functions provided in the interactive mode.
+
+For this problem, the function is `FINDLCA {a} {b}` which requires 2 integer arguments.
+
+Type this function in the input field and run it by pressing ENTER.
+
+If your code is correct, the answer to your query will be displayed.
+
+
+************************ Step 4: Printing the Tree ******************************
+
+The last and most important function provided is to print the tree.
+
+In the input, type `PRINT` and press ENTER to display the whole tree in an understandable manner.
+
+You can use this output to debug your code.
+
+
+################################ Tree File Format ################################
+
+Let us examine the file `tree0.txt`. Its structure looks like this -
+
+```
+1
+-1
+-2
+2
+-1
+4
+3
+-1
+-2
+5
+```
+
+After using the `PRINT` command to print it, we get this -
+
+```
+|__1
+    |__2
+        |--4
+        |__3
+            |__5
+```
+
+We can understand how the tree storage format works using this output (or by reading `tree.cpp`).
+
+The root (1) is printed first. 
+Then recursively -
+    // a -1 is written if the left branch is being added
+    // a -2 is written if any branch is empty
+When we reach a leaf we move to the next node.
+
+You can check the `storeTree` function in `tree.cpp` to understand this in detail.
+
+

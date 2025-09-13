@@ -55,4 +55,9 @@ public:
     // of the fixated tree
     void inorder(ptr start) const;
 
+    void delete_node(int m);
+    ptr successor(ptr nodie);
+    ptr search(int m);
+    void fix_delete(ptr x, ptr parent);
+
 };
