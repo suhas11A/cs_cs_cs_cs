@@ -1,0 +1,11 @@
+void RedBlackTree::delete_node(int m) {
+	ptr my_node = search(m);
+	if (!my_node) return;
+	ptr to_del = (!my_node->right || !my_node->left)? my_node : successor(my_node);
+	if (to_del!=my_node) my_node->data = to_del->data;
+	ptr child = (!to_del->left)? to_del->right : to_del->left;
+	if (child) child->parent = to_del->parent;
+	if (!to_del->parent) {root = child; delete to_del; return;}
+	((to_del->parent->left==to_del)? to_del->parent->left : to_del->parent->right) = child;
+	delete to_del; return;
+}

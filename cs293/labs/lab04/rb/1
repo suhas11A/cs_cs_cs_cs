@@ -1,0 +1,17 @@
+void RedBlackTree::delete_node(int m) {
+	ptr my_node = search(m);
+	if (!my_node) return;
+	ptr to_del = (!my_node->right || !my_node->left)? my_node : successor(my_node);
+	if (to_del!=my_node) my_node->data = to_del->data;
+	ptr child = (!to_del->left)? to_del->right : to_del->left;
+	if (child) child->parent = to_del->parent;
+	int yred = to_del->is_red; //
+	ptr parent = to_del->parent; //
+	if (!to_del->parent) {root = child; if (root) root->is_red = 0; delete to_del; return;}
+	((to_del->parent->left==to_del)? to_del->parent->left : to_del->parent->right) = child;
+	if (yred==0) { //
+		if (child && child->is_red) child->is_red = 0; //
+		else fix_delete(child, parent); //
+	} //
+	delete to_del; return;
+}
