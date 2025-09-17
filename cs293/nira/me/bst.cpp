@@ -31,6 +31,9 @@ public:
     binary_search_tree() {
         root = nullptr;
     }
+    ~binary_search_tree(){ clear(root); }
+    static void clear(node* p){ if(!p) return; clear(p->left); clear(p->right); delete p; }
+
     void insert(int n) {
         auto temp = root; node* x = nullptr;
         while(!is_null(temp)) {
