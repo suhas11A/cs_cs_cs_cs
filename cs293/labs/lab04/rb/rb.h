@@ -22,6 +22,9 @@ public:
     // Constructor
     RedBlackTree();
 
+    ~RedBlackTree(){ clear(root); }
+    static void clear(node* p){ if(!p) return; clear(p->left); clear(p->right); delete p; }
+
     // Helper Update Functions
     const ptr getRoot() const;
 
