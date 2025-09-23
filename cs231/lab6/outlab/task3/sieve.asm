@@ -41,73 +41,121 @@ _start:
 ; Two uses of the brk syscall (syscall number = 12)
 ; arr = brk(0);
 ; brk(arr + n*8); Why 8? Each element of arr is of 8 bytes.
+    mov r12, rax ;r12 has n
+    mov rax, 12
+    xor rdi, rdi
+    syscall
+    mov r13, rax ;r13 has arr
+    mov rdx, r12
+    shl rdx, 3 ;rdx has 8*n
+    mov rdi, r13
+    add rdi, rdx ;rdi has arr+8*n
+    mov rax, 12
+    syscall
 ;;;;;;;;;;;;;;;;;; Task 2 : Store local variables ;;;;;;;;;;;;;;;;;;;
 ; Store local variables (n and arr) in the stack
 ; Subtract 16 from the stack pointer to make space for them
 ; That is, rsp -= 16
 ; Now, *(rsp) = n
 ; *(rsp + 8) = arr
+    sub rsp, 16
+    mov [rsp], r12
+    mov [rsp+8], r13
 ;;;;;;;;;;;;;;;;;;; Task 3 : For loop 1 ;;;;;;;;;;;;;;;
+    mov rax, 0 ;rax has i
+    sub rsp, 8
+    mov [rsp], rax
 ; Make space on the stack for i
 ; That is, rsp -= 8
 ; Note now, *(rsp) = i, *(rsp + 8) = n and *(rsp + 16) = arr
 ; Store 0 in i, that is *(rsp) = 0
 .for1Begin:
     ; Write code to jump to for1End if i >= n
-    
+    cmp rax, r12
+    jge .for1End    
     ; Do array[i] = 0
     ; *(*(rsp + 16) + i*8) = 0 (Why 8? Because each element of the array is of 8 bytes)
-
+    mov qword[r13+8*rax], 0
     ; load and increment i
+    inc rax
+    jmp .for1Begin
     ; That is, *(rsp)++;
     ; Jump to for1Begin
 .for1End:
+    add rsp, 8
 ; Restore stack, rsp += 8
 ;;;;;;;;;;;;;;;;;; Task 4 : For loop 2 ;;;;;;;;;;;;;;;;;;;;;
 ; Make space on the stack for i
+    mov rax, 2
+    sub rsp, 8
+    mov [rsp], rax
 ; That is, rsp -= 8
 ; Note now, *(rsp) = i, *(rsp + 8) = n and *(rsp + 16) = arr
 ; Store 2 in i, that is *(rsp) = 2
 .for2Begin:
     ; Write code to jump to for2End if i >= n
-
+    cmp rax, r12
+    jge .for2End
+    cmp qword[r13+8*rax], 0
+    jne .else
     ; Write code to jump to else if array[i] != 0
     ; *(*(rsp + 16) + i*8) = array[i]
 .if:
     ; Make space on the stack for j
+    sub rsp, 8
     ; That is, rsp -= 8
+    mov rbx, rax
+    shl rbx, 1
+    mov [rsp], rbx
     ; Note now, *(rsp) = j. *(rsp + 8) = i, *(rsp + 16) = n and *(rsp + 24) = arr
     ; Store i * 2 in j, that is *(rsp) = 2 * *(rsp + 8)
     .innerForBegin:
         ; Write code to jump to innerForEnd if j >= n
-
+        cmp rbx, r12
+        jge .innerForEnd
         ; Write code to jump to innerElse if array[j] != 0
         ; *(*(rsp + 24) + j * 8) = array[j]
+        cmp qword [r13+8*rbx], 0
+        jne .innerElse
         .innerIf:
         ; array[j] = i
         ; That is, *(*(rsp + 24) + j*8) = *(rsp + 8)
+        mov [r13+8*rbx], rax
 
         .innerElse:
+        add rbx, rax
+        jmp .innerForBegin
         ; Load and do j += i
         ; That is, *(rsp) += *(rsp + 8)
         ; Jump to innerForBegin
     .innerForEnd:
+        add rsp, 8
     ; Restore the stack, rsp += 8
 .else:
+    inc rax
+    jmp .for2Begin
     ; load and increment i
     ; That is, *(rsp)++;
     ; Jump to for2Begin
 .for2End:
 ; Restore stack, rsp += 8
+    add rsp, 8
 ;;;;;;;;;;;;;;;;;;; Task 5 : For loop 3 ;;;;;;;;;;;;;;;;;;;;;
 ; Make space on the stack for i
 ; That is, rsp -= 8
+    sub rsp, 8
+    mov rax, 2
+    mov [rsp], rax
 ; Note now, *(rsp) = i, *(rsp + 8) = n and *(rsp + 16) = arr
 ; Store 2 in i, that is *(rsp) = 2
 .for3Begin:
 ; Write code to jump to for3End if i >= n
-
+    cmp rax, r12
+    jge .for3End
 ; rax = array[i]
+    push rax
+    mov rax, qword[r13+8*rax]
+    
 ; That is, rax = *(*(rsp + 16) + i*8)
 
     ; Prints the number stored in rax to stdout
@@ -133,10 +181,14 @@ _start:
 
 
 ; load and increment i
+    pop rax
+    inc rax
+    jmp .for3Begin
 ; That is, *(rsp)++;
 ; Jump to for3Begin
 .for3End:
 ; Restore stack, rsp += 8
+    add rsp, 8
 
     mov rax, 60
     xor rdi, rdi
