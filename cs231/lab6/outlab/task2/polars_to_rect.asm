@@ -61,31 +61,31 @@ main:
     call print_cmplx          ; should show converted rectangular form
 
     ; --- Test: exp ---
-    movups xmm0, [two]
+    movsd xmm0, [two]
     mov rdi, 0x6
 
     call exp
 
-    movups [temp],xmm0 
+    movsd [temp],xmm0 
     lea rdi, [label_exp]
     lea rsi , [temp]
     call print_float
 
     ; --- Test: sin ---
-    movups xmm0, [two]
+    movsd xmm0, [two]
 
     call sin
 
-    movups [temp],xmm0 
+    movsd [temp],xmm0 
     lea rdi, [label_sin]
     lea rsi , [temp]
     call print_float
 
     ; --- Test: cos ---
-    movups xmm0, [two]
+    movsd xmm0, [two]
     call cos
 
-    movups [temp],xmm0 
+    movsd [temp],xmm0 
     lea rdi, [label_cos]
     lea rsi , [temp]
     call print_float
@@ -103,11 +103,27 @@ polars_to_rect:
     movsd xmm3, xmm2 ;xmm3 is mag
 
     movsd xmm0, xmm1
+    sub     rsp, 64
+    movdqu  [rsp+16], xmm1
+    movdqu  [rsp+32], xmm2
+    movdqu  [rsp+48], xmm3
     call cos
+    movdqu  xmm1, [rsp+16]
+    movdqu  xmm2, [rsp+32]
+    movdqu  xmm3, [rsp+48]
+    add     rsp, 64
     mulsd xmm3, xmm0
 
     movsd xmm0, xmm1
+    sub     rsp, 64
+    movdqu  [rsp+16], xmm1
+    movdqu  [rsp+32], xmm2
+    movdqu  [rsp+48], xmm3
     call sin
+    movdqu  xmm1, [rsp+16]
+    movdqu  xmm2, [rsp+32]
+    movdqu  xmm3, [rsp+48]
+    add     rsp, 64
     mulsd xmm2, xmm0
 
     movsd    qword [rsi+16], xmm2
@@ -115,16 +131,16 @@ polars_to_rect:
     ret
 
 exp:
-    movsd xmm2, [one] ;xmm0 has base, xmm2 has temp
-    mov rsi, 0 ;rsi has i, rdi has power
+    movsd xmm4, [one] ;xmm0 has base, xmm2 has temp
+    mov rcx, 0 ;rcx has i, rdi has power
 .exp_loop:
-    cmp rsi, rdi
+    cmp rcx, rdi
     jge .out_exp
-    mulsd xmm2, xmm0
-    inc rsi
+    mulsd xmm4, xmm0
+    inc rcx
     jmp .exp_loop
 .out_exp:
-    movsd xmm0, xmm2
+    movsd xmm0, xmm4
     ret
 ;-------------------------------------------------
 sin:
