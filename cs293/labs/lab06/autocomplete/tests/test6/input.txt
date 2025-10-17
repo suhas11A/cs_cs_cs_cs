@@ -1,0 +1,6 @@
+5
+data structure algorithm design debug
+10 5 8 12 12
+2
+de 5
+d 3

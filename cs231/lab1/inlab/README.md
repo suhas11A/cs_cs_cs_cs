@@ -1,0 +1,2 @@
+# Lab 1: Verilog: Week 1
+The problem statement of the lab is given in `problem_statement.pdf`. The slides shared with you are available in `data_types.pdf` and the video shared with you is available in `module-tb-gtkwave.mp4`. The motivation behind doing verilog can be seen in `motivation.pdf`.

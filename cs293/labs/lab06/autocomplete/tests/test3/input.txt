@@ -1,0 +1,6 @@
+3
+car cart carbon
+5 10 7
+2
+ca 0
+carb 5

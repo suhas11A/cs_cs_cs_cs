@@ -1,34 +1,26 @@
-module tb_tFlipFlop;
+module tb_compare_wire_reg;
     reg clk;
-    reg t;
+    reg d;
+    wire q_comb;
     wire q_ff;
 
-    // Instantiate the T flip-flop
-    tFlipFlop uut (
-        .clk(clk),
-        .t(t),
-        .q(q_ff)
-    );
+    buffer u_comb (.d(d), .q(q_comb));
+    dFlipFlop u_ff (.clk(clk), .d(d), .q(q_ff));
 
-    // Clock generation (10 ns period)
+    // Clock generation
     initial clk = 0;
-    always #5 clk = ~clk;
+    always #5 clk = ~clk;  // 10ns clock
 
-    // Simulation sequence
     initial begin
-        uut.q = 0;
-        $dumpfile("tff_wave.vcd");
-        $dumpvars(0, tb_tFlipFlop);
-        $display("Time | clk t | q_ff");
-        $monitor("%4t |  %b   %b |  %b", $time, clk, t, q_ff);
-
-        t = 0; #10;   // Should hold value
-        t = 1; #10;   // Toggle
-        t = 1; #10;   // Toggle
-        t = 0; #10;   // Hold
-        t = 1; #20;   // Toggle twice
-        t = 0; #10;   // Hold
-
+        $dumpfile("wave.vcd");   // output VCD file
+        $dumpvars(0, tb_compare_wire_reg);  // dump all variables in tb_compare_wire_reg
+        $display("Time | clk d | comb q | flipflop q");
+        $monitor("%4t |  %b   %b |    %b     |     %b", $time, clk, d, q_comb, q_ff);
+        
+        d = 0; #7;
+        d = 1; #10;
+        d = 0; #10;
+        d = 1; #10;
         $finish;
     end
 endmodule

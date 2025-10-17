@@ -1,0 +1,4 @@
+{ 
+    "problem": "autocomplete",
+    "makefile.configureOnOpen": false
+}

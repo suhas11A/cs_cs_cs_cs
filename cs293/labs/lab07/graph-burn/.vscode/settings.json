@@ -1,0 +1,4 @@
+{ 
+    "problem": "graph-burn",
+    "makefile.configureOnOpen": false
+}

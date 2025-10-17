@@ -1,0 +1,4 @@
+{ 
+    "problem": "all-topological",
+    "makefile.configureOnOpen": false
+}

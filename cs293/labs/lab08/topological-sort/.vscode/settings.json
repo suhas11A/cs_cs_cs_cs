@@ -1,0 +1,4 @@
+{ 
+    "problem": "topological-sort",
+    "makefile.configureOnOpen": false
+}

@@ -1,0 +1,6 @@
+4
+algae alpine alpha beta
+10 10 10 5
+2
+al 5
+a 2

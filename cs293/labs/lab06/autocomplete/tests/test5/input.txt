@@ -1,0 +1,6 @@
+3
+go god gopher
+50 50 100
+2
+go 3
+g 2
