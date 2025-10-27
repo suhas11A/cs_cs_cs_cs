@@ -42,17 +42,14 @@ int main() {
     /* YOU MAY USE THE BELOW SPACE TO SETUP VARIABLES */
     // Note: You can expand this space and insert as many lines of code as you want
     // The only thing is you can't write above or below the comments, only in between!
-    volatile int first_accum = 0;
-    for (int j = 0; j < 15000; j++) {
-        if (arr[j]<=7500) arr[j] = -arr[j];
-    }
-
+    int temp;
     /* YOU MAY USE THE ABOVE SPACE TO SETUP VARIABLES */
 
     for (int i = 0; i < 150000; i++) {
         for (int j = 0; j < 15000; j++) {
             /* YOUR COMPUTATIONS SHOULD BE DONE IN THE SPACE BELOW */
-            accum += i*arr[j];
+            temp = arr[j];
+            accum += i*temp*(2*(temp/7501) - 1);
             /* YOUR COMPUTATIONS SHOULD BE DONE IN THE SPACE ABOVE */
         }
     }

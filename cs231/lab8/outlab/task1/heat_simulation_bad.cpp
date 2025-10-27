@@ -87,3 +87,4 @@ int main(int argc, char** argv) {
     free(new_grid);
     return 0;
 }
+

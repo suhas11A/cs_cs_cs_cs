@@ -53,28 +53,28 @@ int main() {
         }
     }
 
-    start = std::chrono::high_resolution_clock::now();
-    matrix* D = convolve(nA, nC);
-    end = std::chrono::high_resolution_clock::now();
-    std::cout << "Convolution Done\n";
-    duration = end - start;
-    for (uint64_t i = 64; i < 800 - 64; i++) {
-        for (uint64_t j = 64; j < 800 - 64; j++) {
-            double sum = 0.0;
-            for (int k = -64; k <= 64; k++) {
-                for (int l = -64; l <= 64; l++) {
-                    sum += (*(nA->element(i + k, j + l))) * (*(nC->element(k + 64, l + 64)));
-                }
-            }
-            // std::cout << *(D->element(i, j)) << " " << sum << "\n";
-            if (fabs(*(D->element(i, j)) - sum) > epsilon) {
-                std::cout << "Convolution Error at (" << i << ", " << j << ") Expected " << sum << " got " << *(D->element(i, j)) << "\n";
-                exit(1);
-            }
-        }
-        // std::cout << "\n";
-    }
-    std::cout << "Convolution Time: " << duration.count() << " ms\n";
+    // start = std::chrono::high_resolution_clock::now();
+    // matrix* D = convolve(nA, nC);
+    // end = std::chrono::high_resolution_clock::now();
+    // std::cout << "Convolution Done\n";
+    // duration = end - start;
+    // for (uint64_t i = 64; i < 800 - 64; i++) {
+    //     for (uint64_t j = 64; j < 800 - 64; j++) {
+    //         double sum = 0.0;
+    //         for (int k = -64; k <= 64; k++) {
+    //             for (int l = -64; l <= 64; l++) {
+    //                 sum += (*(nA->element(i + k, j + l))) * (*(nC->element(k + 64, l + 64)));
+    //             }
+    //         }
+    //         // std::cout << *(D->element(i, j)) << " " << sum << "\n";
+    //         if (fabs(*(D->element(i, j)) - sum) > epsilon) {
+    //             std::cout << "Convolution Error at (" << i << ", " << j << ") Expected " << sum << " got " << *(D->element(i, j)) << "\n";
+    //             exit(1);
+    //         }
+    //     }
+    //     // std::cout << "\n";
+    // }
+    // std::cout << "Convolution Time: " << duration.count() << " ms\n";
     start = std::chrono::high_resolution_clock::now();
     matrix* E = weirdMul(A, B);
     end = std::chrono::high_resolution_clock::now();

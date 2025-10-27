@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdint>
 #include <chrono>
-#include <vector>
 
 volatile int accum = 0;
 
@@ -51,30 +50,30 @@ int main() {
 
     preAdd = std::chrono::high_resolution_clock::now();
     accum = 0;
-    // My code begins
+    // olala
     int n = 1500;
     int rs1[n] = {}; int rs2[n] = {};
     int sX[n] = {}; int sY[n] = {};
-    for(int r=0;r<n;r++) {
-        for(int c=0;c<n;++c){
-            rs1[r]+=m1[r][c];
-            rs2[r]+=m2[r][c];
+    for (int i = 0; i<n; i++) {
+        for (int j = 0; j<n; j++) {
+            rs1[i] += m1[i][j];
+            rs2[i] += m2[i][j];
         }
     }
-    for(int k=0;k<n;k++){
-        int a=rs1[arr[k]];
-        int b=rs2[arr[k]];
-        for(int r=0;r<n;r++){
-            sX[r]+= m2[k][r]*a;
-            sY[r]+= m1[k][r]*b;
+    for (int i=0;i<n;i++) {
+        int a = rs1[arr[i]];
+        int b = rs2[arr[i]];
+        for (int j=0;j<n;j++) {
+            sX[j] += m2[i][j]*a;
+            sY[j] += m1[i][j]*b;
         }
     }
-    for(int j=0;j<n;j++){
-        int r=arr[j];
-        accum += (r>750 ? sX[r] : -sY[r]);
+    for (int j=0;j<n;j++) {
+        int tempo = arr[j];
+        accum += (tempo>750 ? sX[tempo] : -sY[tempo]);
     }
-    //My code ends
     postAdd = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(postAdd - preAdd).count();
     std::cout << "accum = " << accum << " time taken = " << duration << std::endl;
+
 }

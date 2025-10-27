@@ -60,6 +60,45 @@ int main () {
     // AVX2 Implementation
     preAdd = std::chrono::high_resolution_clock::now();
     double layer2OutAVX = 0;
+    __m256d zero_hehe = _mm256_setzero_pd();
+    for (int i=0; i < NUM_CELL; i++) {
+        *(layer1OutsAVX.element(i)) = 0;
+        int j=0;
+        __m256d result_hehe = _mm256_setzero_pd();
+        for (; j < INPUT_DIM-4; j+=4) {
+            __m256d v1_hehe = _mm256_loadu_pd(layer1CellWeights[i]->element(j));
+            __m256d v2_hehe = _mm256_loadu_pd(input.element(j));
+            __m256d v4_hehe = _mm256_mul_pd(v1_hehe, v2_hehe);
+            __m256d v3_hehe = _mm256_max_pd(zero_hehe, v4_hehe);
+            result_hehe = _mm256_add_pd(result_hehe, v3_hehe);
+        }
+        {    vector* temp_result = new vector(4);
+            _mm256_storeu_pd(temp_result->element(0), result_hehe);
+            *(layer1OutsAVX.element(i)) += *(temp_result->element(0)) + *(temp_result->element(1)) + *(temp_result->element(2)) + *(temp_result->element(3));
+        }
+        for (;j< INPUT_DIM; j++) {
+            *(layer1OutsAVX.element(i)) += max(0.0,(*(layer1CellWeights[i]->element(j))) * (*(input.element(j))));
+        }
+    }
+    int i=1;
+    __m256d result_hehe = _mm256_setzero_pd();
+    for (; i < NUM_CELL-4; i+=4) {
+        __m256d v1_hehe = _mm256_loadu_pd(layer1OutsAVX.element(i));
+        __m256d v2_hehe = _mm256_loadu_pd(layer1OutsAVX.element(i-1));
+        __m256d v4_hehe = _mm256_loadu_pd(layer1OutsAVX.element(i));
+        __m256d v5_hehe = _mm256_fmadd_pd(v2_hehe, v4_hehe, v4_hehe);
+        __m256d v6_hehe = _mm256_max_pd(v1_hehe, v5_hehe);
+        result_hehe = _mm256_add_pd(result_hehe, v6_hehe);
+    }
+    {    vector* temp_result = new vector(4);
+        _mm256_storeu_pd(temp_result->element(0), result_hehe);
+        layer2OutAVX += *(temp_result->element(0)) + *(temp_result->element(1)) + *(temp_result->element(2)) + *(temp_result->element(3));
+    }
+    for (; i < NUM_CELL; i++) {
+        double val1 = *(layer1OutsAVX.element(i));
+        double val2 = (*(layer1OutsAVX.element(i-1)) + 1) * (*(layer1OutsAVX.element(i)));
+        layer2OutAVX += max(val1, val2);
+    }
     // FILL SOLUTION HERE
     postAdd = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(postAdd - preAdd).count();

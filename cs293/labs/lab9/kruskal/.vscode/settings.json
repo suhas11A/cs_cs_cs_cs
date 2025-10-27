@@ -1,0 +1,4 @@
+{ 
+    "problem": "kruskal",
+    "makefile.configureOnOpen": false
+}

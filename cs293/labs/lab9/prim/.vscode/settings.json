@@ -1,0 +1,4 @@
+{ 
+    "problem": "prim",
+    "makefile.configureOnOpen": false
+}

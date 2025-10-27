@@ -7,7 +7,7 @@ bool Graph::isCyclePresent(){
         n++;
         nodie.push_back(tempo.first);
     }
-    std::map<int,int> n_to_nodes;
+    std::unordered_map<int,int> n_to_nodes;
     for (int i=0;i<n;i++) {
         n_to_nodes[nodie[i]] = i;
     }
