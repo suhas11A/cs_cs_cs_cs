@@ -1,0 +1,4 @@
+{ 
+    "problem": "max-fish",
+    "makefile.configureOnOpen": false
+}
