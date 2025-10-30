@@ -1,70 +1,51 @@
 #include "max-fish.h"
 
-////////////////////////////////////////////////////////////////////////////
+int A[4] = {0,0,-1,1};
+int B[4] = {1,-1,0,0};
 
-// You can add more functions here
-
-////////////////////////////////////////////////////////////////////////////
-
-int bfs(vector<vector<int>> &grid, int i, int j)
-{
+void bfs(vector<vector<int>> &grid, vector<vector<int>> &ccid, vector<vector<int>> &visited, int currid, int i, int j) {
     int m = grid.size();
     int n = grid[0].size();
-
-    if (grid[i][j] == 0)
-    {
-        return 0;
-    }
-
-    int totalFish = 0;
     queue<pair<int, int>> q;
-    q.push({i, j});
-
-    vector<pair<int, int>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-
-    while (!q.empty())
-    {
-        auto [x, y] = q.front();
-        q.pop();
-
-        if (grid[x][y] > 0)
-        {
-            totalFish += grid[x][y];
-            grid[x][y] = 0;
-        }
-
-        for (const auto &dir : directions)
-        {
-            int newX = x + dir.first;
-            int newY = y + dir.second;
-            if (newX >= 0 && newX < m && newY >= 0 && newY < n && grid[newX][newY] > 0)
-            {
-                q.push({newX, newY});
-            }
+    q.push(make_pair(i,j));
+    visited[i][j] = true;
+    ccid[i][j] = currid;
+    while (!q.empty()) {
+        auto [curri, currj] = q.front(); q.pop();
+        for (int k=0;k<4;k++) {
+          int newrow = curri + A[k];
+          int newcol = currj + B[k];
+          if (newrow<0 || newrow>=m || newcol<0 || newcol>=n || grid[newrow][newcol]==0 || visited[newrow][newcol]) continue;
+          q.push(make_pair(newrow,newcol));
+          visited[newrow][newcol] = true;
+          ccid[newrow][newcol] = currid;
         }
     }
-
-    return totalFish;
 }
 
-
-
 // Write your code inside the findMaxFish function
-int Solution::findMaxFish(vector<vector<int>> &grid)
-{
-  int maxFish = 0;
-  int m = grid.size();
-  int n = grid[0].size();
-  for (int i = 0; i < m; ++i)
-  {
-      for (int j = 0; j < n; ++j)
-      {
-          if (grid[i][j] > 0)
-          {
-              maxFish = max(maxFish, bfs(grid, i, j));
-          }
-      }
-  }
-
-  return maxFish;
+int Solution::findMaxFish(vector<vector<int>> &grid) {
+    int m = grid.size();
+    if (!m) return 0;
+    int n = grid[0].size();
+    vector<vector<int>> ccid(m, vector<int> (n,0));
+    vector<vector<int>> visited(m, vector<int> (n,false));
+    int currid = 1;
+    for (int i=0;i<m*n;i++) {
+      int temprow = i/n;
+      int tempcol = i%n;
+      if (grid[temprow][tempcol] && !visited[temprow][tempcol]) {bfs(grid, ccid, visited, currid, temprow, tempcol); currid++;}
+    }
+    vector<int> nums(currid,0);
+    for (int i=0;i<m*n;i++) {
+      int temprow = i/n;
+      int tempcol = i%n;
+      nums[ccid[temprow][tempcol]]+=grid[temprow][tempcol];
+    }
+    int ans = 0;
+    if (currid==1) return 0;
+    for (int hehe=1;hehe<currid;hehe++) {
+      ans = max(ans, nums[hehe]);
+    }
+    return ans;
 }

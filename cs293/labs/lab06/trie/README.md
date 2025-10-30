@@ -2,7 +2,7 @@
 
 In this part of the lab, you will be implementing the prefix trie as discussed in class. We will also be using trie to implement an autocomplete feature.
 
-Auto-complete is used to complete the prefix of a word into a complete word. For instance, suppose our prefix is `ca'. One possible autocomplete is `cat'. There can be multiple possible auto-completions possible, in which case, you must print all of them. For instance, auto-complete for a null string is the entire dictionary. In this part of the lab, you will insert some words into a trie, which will be our set of possible words and will implement auto-complete on it.
+Auto-complete is used to complete the prefix of a word into a complete word. For instance, suppose our prefix is 'ca'. One possible autocomplete is 'cat'. There can be multiple possible auto-completions possible, in which case, you must print all of them. For instance, auto-complete for a null string is the entire dictionary. In this part of the lab, you will insert some words into a trie, which will be our set of possible words and will implement auto-complete on it.
 
 Note that we will be using ONLY LOWERCASE characters in this part of the lab.
 
