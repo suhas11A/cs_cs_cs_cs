@@ -8,7 +8,7 @@ LDLIBS := -L/usr/lib/x86_64-linux-gnu/libstdc++.so.6 -lstdc++
 
 .phony: all clean
 
-all: bin/lora1
+all: bin/nira
 
 clean: 
 	$(RM) inc/champsim_constants.h
@@ -19,24 +19,32 @@ clean:
 	 find . -name \*.d -delete
 	 $(RM) -r obj
 
-	 find replacement/lru -name \*.o -delete
-	 find replacement/lru -name \*.d -delete
+	 find replacement/rrip -name \*.o -delete
+	 find replacement/rrip -name \*.d -delete
 	 find prefetcher/no -name \*.o -delete
 	 find prefetcher/no -name \*.d -delete
+	 find replacement/nru -name \*.o -delete
+	 find replacement/nru -name \*.d -delete
 	 find prefetcher/no_instr -name \*.o -delete
 	 find prefetcher/no_instr -name \*.d -delete
+	 find replacement/plru -name \*.o -delete
+	 find replacement/plru -name \*.d -delete
+	 find replacement/pc-based -name \*.o -delete
+	 find replacement/pc-based -name \*.d -delete
+	 find replacement/lru -name \*.o -delete
+	 find replacement/lru -name \*.d -delete
 	 find branch/bimodal -name \*.o -delete
 	 find branch/bimodal -name \*.d -delete
 	 find btb/basic_btb -name \*.o -delete
 	 find btb/basic_btb -name \*.d -delete
 
-bin/lora1: $(patsubst %.cc,%.o,$(wildcard src/*.cc)) obj/repl_rreplacementDlru.a obj/pref_pprefetcherDno.a obj/pref_pprefetcherDno_instr.a obj/bpred_bbranchDbimodal.a obj/btb_bbtbDbasic_btb.a
+bin/nira: $(patsubst %.cc,%.o,$(wildcard src/*.cc)) obj/repl_rreplacementDrrip.a obj/pref_pprefetcherDno.a obj/repl_rreplacementDnru.a obj/pref_pprefetcherDno_instr.a obj/repl_rreplacementDplru.a obj/repl_rreplacementDpcHbased.a obj/repl_rreplacementDlru.a obj/bpred_bbranchDbimodal.a obj/btb_bbtbDbasic_btb.a
 	$(CXX) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-replacement/lru/%.o: CFLAGS += -Ireplacement/lru
-replacement/lru/%.o: CXXFLAGS += -Ireplacement/lru
-replacement/lru/%.o: CXXFLAGS +=  -Dinitialize_replacement=repl_rreplacementDlru_initialize -Dfind_victim=repl_rreplacementDlru_victim -Dupdate_replacement_state=repl_rreplacementDlru_update -Dreplacement_final_stats=repl_rreplacementDlru_final_stats
-obj/repl_rreplacementDlru.a: $(patsubst %.cc,%.o,$(wildcard replacement/lru/*.cc)) $(patsubst %.c,%.o,$(wildcard replacement/lru/*.c))
+replacement/rrip/%.o: CFLAGS += -Ireplacement/rrip
+replacement/rrip/%.o: CXXFLAGS += -Ireplacement/rrip
+replacement/rrip/%.o: CXXFLAGS +=  -Dinitialize_replacement=repl_rreplacementDrrip_initialize -Dfind_victim=repl_rreplacementDrrip_victim -Dupdate_replacement_state=repl_rreplacementDrrip_update -Dreplacement_final_stats=repl_rreplacementDrrip_final_stats
+obj/repl_rreplacementDrrip.a: $(patsubst %.cc,%.o,$(wildcard replacement/rrip/*.cc)) $(patsubst %.c,%.o,$(wildcard replacement/rrip/*.c))
 	@mkdir -p $(dir $@)
 	ar -rcs $@ $^
 
@@ -47,10 +55,38 @@ obj/pref_pprefetcherDno.a: $(patsubst %.cc,%.o,$(wildcard prefetcher/no/*.cc)) $
 	@mkdir -p $(dir $@)
 	ar -rcs $@ $^
 
+replacement/nru/%.o: CFLAGS += -Ireplacement/nru
+replacement/nru/%.o: CXXFLAGS += -Ireplacement/nru
+replacement/nru/%.o: CXXFLAGS +=  -Dinitialize_replacement=repl_rreplacementDnru_initialize -Dfind_victim=repl_rreplacementDnru_victim -Dupdate_replacement_state=repl_rreplacementDnru_update -Dreplacement_final_stats=repl_rreplacementDnru_final_stats
+obj/repl_rreplacementDnru.a: $(patsubst %.cc,%.o,$(wildcard replacement/nru/*.cc)) $(patsubst %.c,%.o,$(wildcard replacement/nru/*.c))
+	@mkdir -p $(dir $@)
+	ar -rcs $@ $^
+
 prefetcher/no_instr/%.o: CFLAGS += -Iprefetcher/no_instr
 prefetcher/no_instr/%.o: CXXFLAGS += -Iprefetcher/no_instr
 prefetcher/no_instr/%.o: CXXFLAGS +=  -Dprefetcher_initialize=pref_pprefetcherDno_instr_initialize -Dprefetcher_branch_operate=pref_pprefetcherDno_instr_branch_operate -Dprefetcher_cache_operate=pref_pprefetcherDno_instr_cache_operate -Dprefetcher_cycle_operate=pref_pprefetcherDno_instr_cycle_operate -Dprefetcher_cache_fill=pref_pprefetcherDno_instr_cache_fill -Dprefetcher_final_stats=pref_pprefetcherDno_instr_final_stats -Dl1i_prefetcher_initialize=pref_pprefetcherDno_instr_initialize -Dl1i_prefetcher_branch_operate=pref_pprefetcherDno_instr_branch_operate -Dl1i_prefetcher_cache_operate=pref_pprefetcherDno_instr_cache_operate -Dl1i_prefetcher_cycle_operate=pref_pprefetcherDno_instr_cycle_operate -Dl1i_prefetcher_cache_fill=pref_pprefetcherDno_instr_cache_fill -Dl1i_prefetcher_final_stats=pref_pprefetcherDno_instr_final_stats
 obj/pref_pprefetcherDno_instr.a: $(patsubst %.cc,%.o,$(wildcard prefetcher/no_instr/*.cc)) $(patsubst %.c,%.o,$(wildcard prefetcher/no_instr/*.c))
+	@mkdir -p $(dir $@)
+	ar -rcs $@ $^
+
+replacement/plru/%.o: CFLAGS += -Ireplacement/plru
+replacement/plru/%.o: CXXFLAGS += -Ireplacement/plru
+replacement/plru/%.o: CXXFLAGS +=  -Dinitialize_replacement=repl_rreplacementDplru_initialize -Dfind_victim=repl_rreplacementDplru_victim -Dupdate_replacement_state=repl_rreplacementDplru_update -Dreplacement_final_stats=repl_rreplacementDplru_final_stats
+obj/repl_rreplacementDplru.a: $(patsubst %.cc,%.o,$(wildcard replacement/plru/*.cc)) $(patsubst %.c,%.o,$(wildcard replacement/plru/*.c))
+	@mkdir -p $(dir $@)
+	ar -rcs $@ $^
+
+replacement/pc-based/%.o: CFLAGS += -Ireplacement/pc-based
+replacement/pc-based/%.o: CXXFLAGS += -Ireplacement/pc-based
+replacement/pc-based/%.o: CXXFLAGS +=  -Dinitialize_replacement=repl_rreplacementDpcHbased_initialize -Dfind_victim=repl_rreplacementDpcHbased_victim -Dupdate_replacement_state=repl_rreplacementDpcHbased_update -Dreplacement_final_stats=repl_rreplacementDpcHbased_final_stats
+obj/repl_rreplacementDpcHbased.a: $(patsubst %.cc,%.o,$(wildcard replacement/pc-based/*.cc)) $(patsubst %.c,%.o,$(wildcard replacement/pc-based/*.c))
+	@mkdir -p $(dir $@)
+	ar -rcs $@ $^
+
+replacement/lru/%.o: CFLAGS += -Ireplacement/lru
+replacement/lru/%.o: CXXFLAGS += -Ireplacement/lru
+replacement/lru/%.o: CXXFLAGS +=  -Dinitialize_replacement=repl_rreplacementDlru_initialize -Dfind_victim=repl_rreplacementDlru_victim -Dupdate_replacement_state=repl_rreplacementDlru_update -Dreplacement_final_stats=repl_rreplacementDlru_final_stats
+obj/repl_rreplacementDlru.a: $(patsubst %.cc,%.o,$(wildcard replacement/lru/*.cc)) $(patsubst %.c,%.o,$(wildcard replacement/lru/*.c))
 	@mkdir -p $(dir $@)
 	ar -rcs $@ $^
 
@@ -69,9 +105,13 @@ obj/btb_bbtbDbasic_btb.a: $(patsubst %.cc,%.o,$(wildcard btb/basic_btb/*.cc)) $(
 	ar -rcs $@ $^
 
 -include $(wildcard src/*.d)
--include $(wildcard replacement/lru/*.d)
+-include $(wildcard replacement/rrip/*.d)
 -include $(wildcard prefetcher/no/*.d)
+-include $(wildcard replacement/nru/*.d)
 -include $(wildcard prefetcher/no_instr/*.d)
+-include $(wildcard replacement/plru/*.d)
+-include $(wildcard replacement/pc-based/*.d)
+-include $(wildcard replacement/lru/*.d)
 -include $(wildcard branch/bimodal/*.d)
 -include $(wildcard btb/basic_btb/*.d)
 

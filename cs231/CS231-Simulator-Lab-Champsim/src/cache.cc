@@ -18,7 +18,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <map>
 
 #include "champsim.h"
 #include "champsim_constants.h"
@@ -35,9 +34,6 @@ extern uint8_t warmup_complete[NUM_CPUS];
 extern std::array<CACHE*, NUM_CACHES> caches;
 extern MEMORY_CONTROLLER DRAM;
 
-std::map<uint64_t, uint64_t> pc_hit;
-std::map<uint64_t, uint64_t> pc_fill;
-#define BT 1.0
 
 bool check_string(std::string a, std::string req)
 {
@@ -87,7 +83,7 @@ void trackPkt(PACKET& pkt, std::string name, std::string caller, bool trackByVir
       }
       std::cout << std::endl;
       for (auto x : pkt.to_return) {
-        std::cout << ((CACHE*)&(*x)) << " ";
+        std::cout << ((CACHE*)&(*x)) << " "; 
       }
       std::cout << "\n";
     }
@@ -115,7 +111,7 @@ void trackPkt(PACKET& pkt, std::string name, std::string caller, bool trackByVir
       }
       std::cout << std::endl;
       for (auto x : pkt.to_return) {
-        std::cout << ((CACHE*)&(*x)) << " ";
+        std::cout << ((CACHE*)&(*x)) << " "; 
       }
       std::cout << "\n";
     }
@@ -166,12 +162,6 @@ void CACHE::handle_fill()
       trackaddr(fill_mshr->address, NAME, "handle_fill");
     #endif
 
-    if (check_string(NAME, "LLC") && !(pc_fill[fill_mshr->ip]==0) && warmup_complete[fill_mshr->cpu] && ((double)(pc_hit[fill_mshr->ip])/(pc_fill[fill_mshr->ip])) < BT) {
-      writes_available_this_cycle--;
-      MSHR.erase(fill_mshr);
-      continue;
-    }
-
     bool success = filllike_miss(set, way, *fill_mshr);
     if (!success) {
       return;
@@ -206,16 +196,10 @@ void CACHE::handle_writeback()
 
     #ifdef DEBUG_TRACK
     trackaddr(handle_pkt.address, NAME, "handle_writeback");
-    #endif
+    #endif 
     // access cache
     uint32_t set = get_set(handle_pkt.address);
     uint32_t way = get_way(handle_pkt.address, set);
-
-    if (check_string(NAME, "LLC") && !(pc_fill[handle_pkt.ip]==0) && warmup_complete[handle_pkt.cpu] && ((double)(pc_hit[handle_pkt.ip])/(pc_fill[handle_pkt.ip])) < BT) {
-      writes_available_this_cycle--;
-      WQ.pop_front();
-      continue;
-    }
 
     BLOCK& fill_block = block[set * NUM_WAY + way];
 
@@ -288,7 +272,6 @@ void CACHE::handle_read()
 
     if (way < NUM_WAY) // HIT
     {
-      if (check_string(NAME, "LLC") && !warmup_complete[handle_pkt.cpu]) pc_hit[handle_pkt.ip]++;
       readlike_hit(set, way, handle_pkt);
     } else {
       bool success = readlike_miss(handle_pkt);
@@ -333,7 +316,7 @@ void CACHE::readlike_hit(std::size_t set, std::size_t way, PACKET& handle_pkt)
 {
   #ifdef DEBUG_TRACK
   trackaddr(handle_pkt.address, NAME, "readlike_hit");
-  #endif
+  #endif 
   DP(if (warmup_complete[handle_pkt.cpu]) {
     std::cout << "[" << NAME << "] " << __func__ << " hit";
     std::cout << " instr_id: " << handle_pkt.instr_id << " address: " << std::hex << (handle_pkt.address >> OFFSET_BITS);
@@ -528,7 +511,7 @@ bool CACHE::filllike_miss(std::size_t set, std::size_t way, PACKET& handle_pkt)
       writeback_packet.address = fill_block.address;
       writeback_packet.data = fill_block.data;
       writeback_packet.instr_id = handle_pkt.instr_id;
-      writeback_packet.ip = fill_block.ip;
+      writeback_packet.ip = 0;
       writeback_packet.type = WRITEBACK;
       writeback_packet.l2Hit = fill_block.l2Hit;
       writeback_packet.from_llc = fill_block.from_llc;
@@ -548,7 +531,6 @@ bool CACHE::filllike_miss(std::size_t set, std::size_t way, PACKET& handle_pkt)
     if (handle_pkt.type == PREFETCH)
       pf_fill++;
 
-    if (check_string(NAME, "LLC") && !warmup_complete[handle_pkt.cpu]) pc_fill[handle_pkt.ip]++;
     fill_block.valid = true;
     fill_block.prefetch = (handle_pkt.type == PREFETCH && handle_pkt.pf_origin_level == fill_level);
     fill_block.dirty = handle_pkt.dirty;
