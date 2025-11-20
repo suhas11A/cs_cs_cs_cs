@@ -10,7 +10,28 @@ void CACHE::initialize_replacement() {}
 // find replacement victim
 uint32_t CACHE::find_victim(uint32_t cpu, uint64_t instr_id, uint32_t set, const BLOCK* current_set, uint64_t ip, uint64_t full_addr, uint32_t type)
 {
-  return std::distance(current_set, std::max_element(current_set, std::next(current_set, NUM_WAY), lru_comparator<BLOCK, BLOCK>()));
+  // -------- Task 2: prefer blocks predicted to be dead --------------------
+  for (uint32_t way = 0; way < NUM_WAY; ++way) {
+    const BLOCK& blk = current_set[way];
+
+    // (Normally, find_victim is only called when all ways are valid,
+    //  but we keep this check for safety.)
+    if (!blk.valid)
+      continue;
+
+    uint32_t signature = static_cast<uint32_t>(blk.ip);
+    if (dp_predictor.predict_to_be_dead(signature)) {
+      // Choose the first predicted-dead block as victim
+      return way;
+    }
+  }
+  // -----------------------------------------------------------------------
+
+  // Fallback to pure LRU when no block is confidently dead
+  return std::distance(current_set,
+                       std::max_element(current_set,
+                                        std::next(current_set, NUM_WAY),
+                                        lru_comparator<BLOCK, BLOCK>()));
 }
 
 // called on every cache hit and cache fill
