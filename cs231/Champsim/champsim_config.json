@@ -1,5 +1,5 @@
 {
-    "executable_name": "bin/deadblock",
+    "executable_name": "bin/lru",
     "block_size": 64,
     "page_size": 4096,
     "heartbeat_frequency": 10000000,
@@ -157,7 +157,7 @@
         "virtual_prefetch": false,
         "prefetch_activate": "LOAD,PREFETCH",
         "prefetcher": "no",
-        "replacement": "deadblock"
+        "replacement": "lru"
     },
 
     "physical_memory": {

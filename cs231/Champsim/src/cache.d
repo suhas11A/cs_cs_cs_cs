@@ -3,8 +3,7 @@ src/cache.o: src/cache.cc inc/cache.h inc/champsim.h \
  inc/circular_buffer.hpp inc/memory_class.h inc/block.h inc/instruction.h \
  inc/trace_instruction.h inc/ooo_cpu.h inc/operable.h \
  inc/ooo_cpu_modules.inc inc/cache_modules.inc inc/champsim.h \
- inc/champsim_constants.h inc/dram_controller.h inc/util.h inc/vmem.h \
- inc/sampler.h
+ inc/champsim_constants.h inc/dram_controller.h inc/util.h inc/vmem.h
 inc/cache.h:
 inc/champsim.h:
 inc/champsim_constants.h:
@@ -24,4 +23,3 @@ inc/champsim_constants.h:
 inc/dram_controller.h:
 inc/util.h:
 inc/vmem.h:
-inc/sampler.h:

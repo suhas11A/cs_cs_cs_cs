@@ -18,12 +18,13 @@
 
 #include <algorithm>
 #include <iterator>
-
+#include <random>
 #include "champsim.h"
 #include "champsim_constants.h"
 #include "dram_controller.h"
 #include "util.h"
 #include "vmem.h"
+#include "sampler.h"
 
 #ifndef SANITY_CHECK
 #define NDEBUG
@@ -33,6 +34,19 @@ extern VirtualMemory vmem;
 extern uint8_t warmup_complete[NUM_CPUS];
 extern std::array<CACHE*, NUM_CACHES> caches;
 extern MEMORY_CONTROLLER DRAM;
+
+#define NUM_OBSERVERS 32
+DeadBlockPredictor dp_predictor;
+
+std::vector<uint32_t> observers_domain = [] {
+    std::vector<uint32_t> v(2048);
+    std::iota(v.begin(), v.end(), 0);
+    std::shuffle(v.begin(), v.end(), std::mt19937{42});
+    return v;
+}();
+
+std::vector<uint32_t> observers(observers_domain.begin(),
+                                observers_domain.begin() + NUM_OBSERVERS);
 
 
 bool check_string(std::string a, std::string req)
@@ -169,8 +183,13 @@ void CACHE::handle_fill()
 
     if (way != NUM_WAY) {
       // update processed packets
-      fill_mshr->data = block[set * NUM_WAY + way].data;
-      if ((check_string(NAME, "L1D") || check_string(NAME, "L1I") || check_string(NAME, "ITLB") || check_string(NAME, "DTLB")) || (check_string(NAME,"L2C") && fill_mshr->type == PREFETCH && fill_mshr->returnToL1) || (check_string(NAME,"LLC") && fill_mshr->returnToLowerLevels)) {
+      if (!(check_string(NAME, "LLC") && fill_mshr->type != WRITEBACK)) {
+        fill_mshr->data = block[set * NUM_WAY + way].data;
+      }
+
+      if ((check_string(NAME, "L1D") || check_string(NAME, "L1I") || check_string(NAME, "ITLB") || check_string(NAME, "DTLB")) ||
+          (check_string(NAME, "L2C") && fill_mshr->type == PREFETCH && fill_mshr->returnToL1) ||
+          (check_string(NAME, "LLC") && fill_mshr->returnToLowerLevels)) {
         for (auto ret : fill_mshr->to_return) {
           #ifdef DEBUG_TRACK
           trackaddr(fill_mshr->address, NAME, "returing to some guy");
@@ -236,6 +255,15 @@ void CACHE::handle_writeback()
           way = impl_replacement_find_victim(handle_pkt.cpu, handle_pkt.instr_id, set, &block.data()[set * NUM_WAY], handle_pkt.ip, handle_pkt.address,
                                              handle_pkt.type);
 
+        if (check_string(NAME, "LLC") && handle_pkt.type == WRITEBACK) {
+          uint32_t signature = static_cast<uint32_t>(handle_pkt.ip);
+          if (dp_predictor.predict_to_be_dead(signature)) {
+            // Skip installing this block in the LLC (bypass)
+            writes_available_this_cycle--;
+            WQ.pop_front();
+            continue;
+          }
+        }
         success = filllike_miss(set, way, handle_pkt);
       }
 
@@ -329,6 +357,13 @@ void CACHE::readlike_hit(std::size_t set, std::size_t way, PACKET& handle_pkt)
   BLOCK& hit_block = block[set * NUM_WAY + way];
 
   handle_pkt.data = hit_block.data;
+  if (check_string(NAME, "LLC")) {
+    uint32_t set_index = static_cast<uint32_t>(set);
+    if (std::find(observers.begin(), observers.end(), set_index) != observers.end()) {
+      uint32_t signature = static_cast<uint32_t>(hit_block.ip);
+      dp_predictor.update(signature, /*dead=*/false);  // this block turned out to be live
+    }
+  }
   // update prefetcher on load instruction
   if (should_activate_prefetcher(handle_pkt.type) && handle_pkt.pf_origin_level < fill_level) {
     cpu = handle_pkt.cpu;
@@ -489,6 +524,17 @@ bool CACHE::filllike_miss(std::size_t set, std::size_t way, PACKET& handle_pkt)
     std::cout << " cycle: " << current_cycle << std::endl;
   });
 
+  if (check_string(NAME, "LLC") && handle_pkt.type != WRITEBACK) {
+    if (warmup_complete[handle_pkt.cpu] && (handle_pkt.cycle_enqueued != 0))
+      total_miss_latency += current_cycle - handle_pkt.cycle_enqueued;
+
+    // Still count this as an LLC miss/access.
+    sim_miss[handle_pkt.cpu][handle_pkt.type]++;
+    sim_access[handle_pkt.cpu][handle_pkt.type]++;
+
+    return true; // forward-only, no tag/data update in LLC
+  }
+
   bool bypass = (way == NUM_WAY);
 #ifndef LLC_BYPASS
   assert(!bypass);
@@ -496,13 +542,20 @@ bool CACHE::filllike_miss(std::size_t set, std::size_t way, PACKET& handle_pkt)
   assert(handle_pkt.type != WRITEBACK || !bypass);
 
   BLOCK& fill_block = block[set * NUM_WAY + way];
-  bool evicting_dirty = !bypass && (lower_level != NULL) && fill_block.dirty;
+  bool evicting_dirty = !bypass && (lower_level != NULL) && (fill_block.dirty || (check_string(NAME, "L2C") && fill_block.valid));
   uint64_t evicting_address = 0;
 
 #ifdef DEBUG_TRACK
   trackaddr(handle_pkt.address, NAME, "filllike_miss");
 #endif
   if (!bypass) {
+    if (check_string(NAME, "LLC") && fill_block.valid) {
+      uint32_t set_index = static_cast<uint32_t>(set);
+      if (std::find(observers.begin(), observers.end(), set_index) != observers.end()) {
+        uint32_t signature = static_cast<uint32_t>(fill_block.ip);
+        dp_predictor.update(signature, /*dead=*/true);  // evicted from LLC -> dead
+      }
+    }
     if (evicting_dirty) {
       PACKET writeback_packet;
 
@@ -511,10 +564,11 @@ bool CACHE::filllike_miss(std::size_t set, std::size_t way, PACKET& handle_pkt)
       writeback_packet.address = fill_block.address;
       writeback_packet.data = fill_block.data;
       writeback_packet.instr_id = handle_pkt.instr_id;
-      writeback_packet.ip = 0;
+      writeback_packet.ip = fill_block.ip;
       writeback_packet.type = WRITEBACK;
       writeback_packet.l2Hit = fill_block.l2Hit;
       writeback_packet.from_llc = fill_block.from_llc;
+      writeback_packet.dirty = fill_block.dirty;
       auto result = lower_level->add_wq(&writeback_packet);
       if (result == -2)
         return false;
